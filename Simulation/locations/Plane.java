@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-public class Plane{
+public class Plane  {
     // static variable single_instance of type Singleton
     private static Plane plane_instance = null;
 
@@ -26,11 +26,9 @@ public class Plane{
     }
 
     // static method to create instance of Singleton class
-    public static Plane getInstance()
-    {
+    public static Plane getInstance() {
         if (plane_instance == null)
-        plane_instance = new Plane();
-
+            plane_instance = new Plane();
         return plane_instance;
     }
     

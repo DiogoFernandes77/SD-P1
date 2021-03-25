@@ -12,10 +12,9 @@ public class Pilot extends Thread{
         DEBOARDING,
         FLYING_BACK
     }
-    private State pilot_state;
 
     public Pilot(){
-        pilot_state = State.AT_TRANSFER_GATE;
+        State pilot_state = State.AT_TRANSFER_GATE;
     }
 
 

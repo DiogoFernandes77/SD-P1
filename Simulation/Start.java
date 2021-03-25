@@ -10,14 +10,14 @@ public class Start{
     public static int boarding_max;
 
     public static void main(String[] args) throws InterruptedException{
-            
         if(args.length == 4){//custom config
             try{
                 n_passenger = Integer.parseInt(args[0]);
                 plane_capacity = Integer.parseInt(args[1]);
                 boarding_max = Integer.parseInt(args[2]);
                 boarding_min = Integer.parseInt(args[3]);
-                
+                DepartAirport departAirport = new DepartAirport(n_passenger, plane_capacity, boarding_min, boarding_max);
+
             }catch(Exception e){
                 System.out.print("Args must be numbers \n");
                 System.exit(1);
@@ -29,17 +29,15 @@ public class Start{
             plane_capacity = 10;
             boarding_max = 8;
             boarding_min = 5;
+            DepartAirport departAirport = new DepartAirport(n_passenger, plane_capacity, boarding_min, boarding_max);
             System.out.print("Config Ok \n");
 
         }else{
             System.out.print("Arguments missing/wrong \n");
+            System.out.print("N_max_passengers plane_capacity boarding_max boarding_min\n");
             System.exit(1);
         }
 
-
-
-        
-        
     }
 
 
