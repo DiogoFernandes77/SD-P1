@@ -1,15 +1,37 @@
 package Simulation.locations;
 
 public class DestAirport{
-
-    //kill every passenger
-
-    // Pilot travels back to the departure airport with the plane empty, when arrives tells hostess that he is ready to go
-    private void goBack(){
-        //go to the Depart Airport
+    
+    private static DestAirport destArp_instance = null;
+    
+    
+    
+    private DestAirport(){
+        
+        
     }
 
-    //start again all on depart airports
+    public static DestAirport getInstance() {
+        if (destArp_instance == null)
+        destArp_instance = new DestAirport();
+        return destArp_instance;
+    }
+    
+    //---------------------------------------------------/Pilot methods/-----------------------------------------------------//
 
-    // NÃO SEI O QUE POR AQUI
-}
+    //---------------------------------------------------/Hostess methods/-----------------------------------------------------//
+
+    //---------------------------------------------------/Passenger methods/-----------------------------------------------------//
+    
+    //Passenger death 
+    public void Passenger_death(){
+        //kill every thread -> passenger that's is on the plane
+
+    }
+        
+
+    
+
+
+   
+} 

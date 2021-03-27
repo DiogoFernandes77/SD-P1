@@ -16,6 +16,11 @@ public class Pilot extends Thread{
     public Pilot(){
         State pilot_state = State.AT_TRANSFER_GATE;
     }
+    
 
-
+    //implementation of the method run which establishes the thread operativeness
+    @Override
+    public void run(){
+        //Pilot actions cycle
+    }
 }

@@ -32,4 +32,30 @@ public class Plane  {
         return plane_instance;
     }
     
+
+    //---------------------------------------------------/Pilot methods/-----------------------------------------------------//
+    
+    public void flyToDestinationPoint(){}
+    
+    public void announceArrival(){}
+    
+    public void flyToDeparturePoint(){}
+
+
+
+    //---------------------------------------------------/Hostess methods/-----------------------------------------------------//
+
+
+
+
+
+    //---------------------------------------------------/Passenger methods/-----------------------------------------------------//
+
+    public void boardThePlane(){}
+    
+    public void waitForEndOfFlight(){}
+    
+    public void leaveThePlane(){}
+
+
 }

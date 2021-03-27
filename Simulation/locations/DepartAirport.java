@@ -1,50 +1,90 @@
 package Simulation.locations;
 
+import Simulation.Start;
+
 public class DepartAirport {
-    private static int nPassenger, planeCapacity, boardMin, boarMax;
+    private static DepartAirport depArp_instance = null;
+    
+    
+    private static int nPassenger, planeCapacity, boardMin, boardMax;
 
+    
+    
     //construct for the departure airport, know passenger, plane capacity, min and max of boarding
-    public DepartAirport(int n_passenger, int plane_capacity, int board_min, int board_max){
-        nPassenger = n_passenger;
-        planeCapacity = plane_capacity;
-        boardMin = board_min;
-        boarMax = board_max;
+    private DepartAirport(){
+        //Penso que esta é a melhor forma de passar as variaveis
+        nPassenger = Start.n_passenger;
+        planeCapacity = Start.plane_capacity;
+        boardMin = Start.boarding_min;
+        boardMax = Start.boarding_max;
     }
 
-    //waits for the passenger enter in the plane and hostess give a signal to the pilot so he can go to destination airport
-    private void waitForBoarding(){}
-
-    //create threads of Passengers
-    private void goingToAirport(){
-        int i = 0;
-        while(i < nPassenger)
-        {
-            //create one thread for passenger
-        }
+    public static DepartAirport getInstance() {
+        if (depArp_instance == null)
+        depArp_instance = new DepartAirport();
+        return depArp_instance;
     }
+    
+    
+    
+    //---------------------------------------------------/Pilot methods/-----------------------------------------------------//
+    
+    //Signals Hostess that plane is ready to board
+    public void informPlaneReadyForBoarding(){}
+    
+    
+    //waits for the passenger enter in the plane until hostess gives the singal
+    public void waitForAllInBoarding(){}
+   
+
+    //---------------------------------------------------/Hostess methods/-----------------------------------------------------//
+    
+    
+    //Hostess gets ready and waits untill first passenger
+    public void prepareForPassBoarding(){}
+ 
+    //Hostess check documents of the passenger in queue
+    public void checkDocuments(){}
 
     //Hostess waits for the passengers
-    private void waitsForPassenger(){}
+    public void waitForNextPassenger(){}
+ 
+    //Hostess signals pilot that he can fly
+    public void informPlaneReadyToTakeOff(){}
+ 
+    //Hostess waits until next flight
+    public void waitForNextFlight(){}
+    
+    
+    
 
-    //Hostess check documents of the first passenger if its ok then he gets into the plane until the full capacity is reached
-    private void checkPassenger(){ }
+    
 
-    // Hostess gives permission to passenger goes to plane until the full capacity is reached
-    private void toPlane(){
-        //count passenger in the queue
-        // see the first
-        // check documents
-        // if ok goes to plane until the full capacity is reached or the min is reached
-    }
+    
+    //---------------------------------------------------/Passenger methods/-----------------------------------------------------//
 
-    // Its happening the travel between cities
-    private void inPlace(){}
+    //Passenger waits in the queue before showing docs
+    public void waitInQueue(){}
+    
+    //Passenger shows documents
+    public void showDocuments(){}
+    
+       
+    
+    // // Hostess gives permission to passenger after checking documents. 
+    // private void boardThePlane(){
+    //     //count passenger in the queue
+    //     // see the first
+    //     // check documents
+    //     // if ok goes to plane until the full capacity is reached or the min is reached
+    // }
 
-    // Pilot tells hostess that arrives on destination
-    private void atDestination(){
-        //kill every thread -> passenger that's is on the plane
-        //Call method on DestAirPort
-    }
+ 
+
+
+
+
+
 
 
 }
