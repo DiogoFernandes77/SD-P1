@@ -1,5 +1,6 @@
 package Simulation.entities;
 
+import Simulation.locations.DepartAirport;
 
 public class Pilot extends Thread{
 
@@ -12,15 +13,38 @@ public class Pilot extends Thread{
         DEBOARDING,
         FLYING_BACK
     }
-
+    private State pilot_state;
     public Pilot(){
-        State pilot_state = State.AT_TRANSFER_GATE;
+        pilot_state = State.AT_TRANSFER_GATE;
     }
     
 
     //implementation of the method run which establishes the thread operativeness
     @Override
     public void run(){
-        //Pilot actions cycle
+       
+
+        informPlaneReadyForBoarding();
+        //waitForAllInBoarding();
+
+
     }
+
+    private void informPlaneReadyForBoarding(){
+        try{
+            Thread.sleep(2000);
+        }catch(Exception e){}
+        pilot_state = State.READY_FOR_BOARDING;
+        DepartAirport.getInstance().informPlaneReadyForBoarding();
+        
+    }
+    private void waitForAllInBoarding(){
+        pilot_state = State.READY_FOR_BOARDING;
+        DepartAirport.getInstance().waitForAllInBoarding();
+    }
+
+
+
+
+
 }

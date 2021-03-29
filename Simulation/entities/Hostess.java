@@ -1,5 +1,6 @@
 package Simulation.entities;
 
+import Simulation.locations.DepartAirport;
 
 public class Hostess extends Thread{
 
@@ -9,9 +10,9 @@ public class Hostess extends Thread{
         CHECK_PASSENGER,
         READY_TO_FLY
     }
-
+    private State hostess_state;
     public Hostess(){
-        Hostess.State hostess_state = Hostess.State.WAIT_FOR_NEXT_FLIGHT;
+        hostess_state = State.WAIT_FOR_NEXT_FLIGHT;
 
     }
 
@@ -22,7 +23,43 @@ public class Hostess extends Thread{
     //implementation of the method run which establishes the thread operativeness
     @Override
     public void run(){
-        //Pilot actions cycle
+        waitForNextFlight();
+
+        
+    
+    
     }
+
+
+    private void waitForNextFlight(){
+        DepartAirport.getInstance().waitForNextFlight();
+
+    }
+    private void prepareForPassBoarding(){
+        hostess_state = State.WAIT_FOR_PASSENGER;
+        DepartAirport.getInstance().prepareForPassBoarding();
+
+    }
+    private void waitForNextPassenger(){
+        hostess_state = State.WAIT_FOR_PASSENGER;
+        DepartAirport.getInstance().waitForNextPassenger();
+
+
+    }
+
+    private void checkDocuments(){
+        hostess_state = State.CHECK_PASSENGER;
+        DepartAirport.getInstance().checkDocuments();
+
+    }
+
+
+
+
+
+
+
+
+
 
 }

@@ -58,11 +58,11 @@ public class Start{
         }
     
         // Join the threads
-        for(int i = 0; i < n_passenger; i++)
+        for(int id = 0; id < n_passenger; id++)
         {
             try
             {
-                passengers[i].join();
+                passengers[id].join();
             }
             catch (InterruptedException ex)
             {
