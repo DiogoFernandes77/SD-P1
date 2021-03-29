@@ -2,7 +2,7 @@ package Simulation.entities;
 
 public class Passenger extends Thread{
 
-    int id_passenger = 0;
+    private static int id_passenger = 0;
 
     public enum State{
       GOING_TO_AIRPORT,
@@ -11,9 +11,20 @@ public class Passenger extends Thread{
         AT_DESTINATION
     }
 
-    public Passenger(){
+    public Passenger(int id){
         State passenger_state = State.GOING_TO_AIRPORT;
-
+        id_passenger = id; 
     }
+
+
+
+    //implementation of the method run which establishes the thread operativeness
+    @Override
+    public void run(){
+        //Pilot actions cycle
+    }
+
+
+
 
 }

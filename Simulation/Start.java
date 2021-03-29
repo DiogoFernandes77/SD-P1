@@ -4,10 +4,8 @@ import Simulation.locations.*;
 
 public class Start{
 
-    public static int n_passenger;
-    public static int plane_capacity;
-    public static int boarding_min;
-    public static int boarding_max;
+    public static int n_passenger,plane_capacity,boarding_max,boarding_min;
+    
 
     public static void main(String[] args) throws InterruptedException{
         if(args.length == 4){//custom config
@@ -16,7 +14,7 @@ public class Start{
                 plane_capacity = Integer.parseInt(args[1]);
                 boarding_max = Integer.parseInt(args[2]);
                 boarding_min = Integer.parseInt(args[3]);
-                DepartAirport departAirport = new DepartAirport(n_passenger, plane_capacity, boarding_min, boarding_max);
+                
 
             }catch(Exception e){
                 System.out.print("Args must be numbers \n");
@@ -29,7 +27,7 @@ public class Start{
             plane_capacity = 10;
             boarding_max = 8;
             boarding_min = 5;
-            DepartAirport departAirport = new DepartAirport(n_passenger, plane_capacity, boarding_min, boarding_max);
+            
             System.out.print("Config Ok \n");
 
         }else{
@@ -38,6 +36,50 @@ public class Start{
             System.exit(1);
         }
 
+        //Initializing locations
+        DepartAirport departAirport = DepartAirport.getInstance();
+        DestAirport destAirport = DestAirport.getInstance();
+        Plane plane = Plane.getInstance();
+        
+        //Initializing entities Threads
+        Pilot pil = new Pilot();
+        Hostess hos = new Hostess();
+        Passenger[] passengers = new Passenger[n_passenger];
+        for (int id = 0; id < n_passenger; id++){
+            
+            passengers[id] = new Passenger(id);
+        }
+
+        //Start entities Thread
+        pil.start();
+        hos.start();
+        for (int id = 0; id < n_passenger; id++){
+            passengers[id].start();
+        }
+    
+        // Join the threads
+        for(int i = 0; i < n_passenger; i++)
+        {
+            try
+            {
+                passengers[i].join();
+            }
+            catch (InterruptedException ex)
+            {
+                System.out.println("Interrupter Exception Error - " + ex.toString());
+            }
+        }
+        
+        try{
+            pil.join();
+            hos.join();
+        }catch(InterruptedException ex){
+            System.out.println("Interrupter Exception Error - " + ex.toString());
+        }
+    
+    
+    
+    
     }
 
 
