@@ -31,7 +31,7 @@ public class Passenger extends Thread{
     public void run(){
         travelToAirport();
         enterQueue();
-    
+        waitInQueue();
     
     
     
@@ -68,14 +68,21 @@ public class Passenger extends Thread{
 
 
     }
-
+    private void waitInQueue(){
+        passenger_state = State.IN_QUEUE;
+        DepartAirport.getInstance().waitInQueue(this);
+    }
+    
+    
+    
+    
     private void showDocuments(){
 
     }
 
-public int getId_passenger(){
+    public int getId_passenger(){
     return id_passenger;
-}
+    }
 
 
 

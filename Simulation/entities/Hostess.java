@@ -1,9 +1,9 @@
 package Simulation.entities;
 
 import Simulation.locations.DepartAirport;
-
+import Simulation.Start;
 public class Hostess extends Thread{
-
+    
     public enum State{
         WAIT_FOR_NEXT_FLIGHT,
         WAIT_FOR_PASSENGER,
@@ -13,7 +13,7 @@ public class Hostess extends Thread{
     private State hostess_state;
     public Hostess(){
         hostess_state = State.WAIT_FOR_NEXT_FLIGHT;
-
+        
     }
 
 
@@ -24,6 +24,13 @@ public class Hostess extends Thread{
     @Override
     public void run(){
         waitForNextFlight();
+        prepareForPassBoarding();
+        //este while pode ter o valor das variaveis desatualizado not sure yet
+        while(getCurrent_capacity() < getBoardingMin()|| (getCurrent_capacity() < getBoardingMax() && getIsQueueEmpty())){
+            waitForNextPassenger();
+            checkDocuments(); 
+        }
+        System.out.print(" BOARDING COMPLETA");
 
         
     
@@ -53,13 +60,21 @@ public class Hostess extends Thread{
 
     }
 
+    
+    
+    private int getBoardingMin(){
+        return DepartAirport.getInstance().getBoardingMin();
+    }
+    private int getBoardingMax(){
+        return DepartAirport.getInstance().getBoardingMax();
+    }
+    private int getCurrent_capacity(){
+        return DepartAirport.getInstance().getCurrent_capacity();
+    }
+    private boolean getIsQueueEmpty(){
 
-
-
-
-
-
-
+        return DepartAirport.getInstance().getIsQueueEmpty();
+    }
 
 
 }

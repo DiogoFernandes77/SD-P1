@@ -25,7 +25,7 @@ public class Pilot extends Thread{
        
 
         informPlaneReadyForBoarding();
-        //waitForAllInBoarding();
+        waitForAllInBoarding();
 
 
     }
