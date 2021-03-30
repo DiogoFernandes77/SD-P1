@@ -20,18 +20,15 @@ public class DepartAirport {
     private final Lock lock;
     private final Condition waitingPlane, waitingPassenger,waitingCheck,waitingFly,waitingShow;
     private Queue<Passenger> queue ;
-    private HashMap<Integer,Condition> cond_map ;
-    private HashMap<Integer,Boolean> rdyToCheck_map;
     private boolean plane_rdy = false;
     private boolean showing = false;
+    private boolean rdyCheck = false;
     //construct for the departure airport, know passenger, plane capacity, min and max of boarding
     private DepartAirport(){
         lock = new ReentrantLock();
         
         
         queue = new LinkedList<Passenger>();
-        cond_map = new HashMap<Integer,Condition>();
-        rdyToCheck_map = new HashMap<Integer,Boolean>();
         waitingPlane = lock.newCondition();
         waitingPassenger = lock.newCondition();
         waitingCheck = lock.newCondition();
@@ -107,7 +104,7 @@ public class DepartAirport {
         lock.lock();
         try{
            
-           
+            System.out.print("Prepare for Boarding! \n");
             while(queue.isEmpty()){
                 waitingPassenger.await();
             }
@@ -131,8 +128,9 @@ public class DepartAirport {
         try{
             int person_id = queue.peek().getId_passenger();
 
-            rdyToCheck_map.put(person_id, true);
-            cond_map.get(person_id).signal();
+            
+            rdyCheck = true;
+            waitingCheck.signalAll();
             
             System.out.printf("Hostess is waiting to documents to be shown \n");
             while(!showing){
@@ -140,8 +138,9 @@ public class DepartAirport {
             }
             queue.remove();
             showing = false;
+            rdyCheck = false;
             waitingPassenger.signal();
-            current_capacity++;
+            //current_capacity++;
             
         
         }catch(Exception e){
@@ -197,7 +196,7 @@ public class DepartAirport {
         }catch(Exception e){
             System.out.println("Interrupter Exception Error - " + e.toString());
         }finally{
-            System.out.print("I have been signaled \n");
+            
             lock.unlock();
         }
         
@@ -210,8 +209,7 @@ public class DepartAirport {
         try{
             System.out.printf("passenger %d enters queue \n", person.getId_passenger());
             queue.add(person);
-            cond_map.put(person.getId_passenger(), lock.newCondition());
-            rdyToCheck_map.put(person.getId_passenger(),false);
+            
         
         
         }catch(Exception e){
@@ -228,10 +226,10 @@ public class DepartAirport {
             
             waitingPassenger.signal();
             System.out.printf("passenger %d wait for check \n", person.getId_passenger());
-            while(!rdyToCheck_map.get(person.getId_passenger())){
+            while(!(rdyCheck && (queue.peek().getId_passenger() == person.getId_passenger()))){// cada thread ve se hostess ta pronta e se é a vez deles
                 
+                waitingCheck.await();;
                 
-                cond_map.get(person.getId_passenger()).await();
             }
             
             showing = true;

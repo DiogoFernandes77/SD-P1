@@ -4,14 +4,14 @@ import Simulation.locations.*;
 
 public class Start{
 
-    public static int n_passenger,plane_capacity,boarding_max,boarding_min;
+    public static int n_passenger,boarding_max,boarding_min;
     
 
     public static void main(String[] args) throws InterruptedException{
-        if(args.length == 4){//custom config
+        if(args.length == 3){//custom config
             try{
                 n_passenger = Integer.parseInt(args[0]);
-                plane_capacity = Integer.parseInt(args[1]);
+                
                 boarding_max = Integer.parseInt(args[2]);
                 boarding_min = Integer.parseInt(args[3]);
                 
@@ -24,7 +24,7 @@ public class Start{
 
         }else if(args.length == 0){//default config
             n_passenger = 21;
-            plane_capacity = 10;
+            
             boarding_max = 8;
             boarding_min = 5;
             
@@ -32,7 +32,7 @@ public class Start{
 
         }else{
             System.out.print("Arguments missing/wrong \n");
-            System.out.print("N_max_passengers plane_capacity boarding_max boarding_min\n");
+            System.out.print("N_max_passengers boarding_max boarding_min\n");
             System.exit(1);
         }
 
