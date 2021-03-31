@@ -39,7 +39,7 @@ public class Pilot extends Thread{
         
     }
     private void waitForAllInBoarding(){
-        pilot_state = State.READY_FOR_BOARDING;
+        pilot_state = State.WAIT_FOR_BOARDING;
         DepartAirport.getInstance().waitForAllInBoarding();
     }
 

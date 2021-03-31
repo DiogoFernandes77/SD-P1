@@ -53,7 +53,17 @@ public class Plane  {
 
     public void boardThePlane(){}
     
-    public void waitForEndOfFlight(){}
+    public void waitForEndOfFlight(){
+        lock.lock();
+        try{
+           flying = true;
+           System.out.print("Plane is flying \n");
+        }catch(Exception e){
+            System.out.println("Interrupter Exception Error - " + e.toString());
+        }finally{
+            lock.unlock();
+        }
+    }
     
     public void leaveThePlane(){}
 

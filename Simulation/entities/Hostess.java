@@ -13,13 +13,8 @@ public class Hostess extends Thread{
     private State hostess_state;
     public Hostess(){
         hostess_state = State.WAIT_FOR_NEXT_FLIGHT;
-        
     }
 
-
-
-
-   
     //implementation of the method run which establishes the thread operativeness
     @Override
     public void run(){
@@ -32,35 +27,26 @@ public class Hostess extends Thread{
         }
         System.out.print(" BOARDING COMPLETA");
 
-        
-    
-    
     }
-
 
     private void waitForNextFlight(){
         DepartAirport.getInstance().waitForNextFlight();
-
     }
     private void prepareForPassBoarding(){
         hostess_state = State.WAIT_FOR_PASSENGER;
         DepartAirport.getInstance().prepareForPassBoarding();
-
     }
     private void waitForNextPassenger(){
         hostess_state = State.WAIT_FOR_PASSENGER;
         DepartAirport.getInstance().waitForNextPassenger();
-
 
     }
 
     private void checkDocuments(){
         hostess_state = State.CHECK_PASSENGER;
         DepartAirport.getInstance().checkDocuments();
-
     }
 
-    
     
     private int getBoardingMin(){
         return DepartAirport.getInstance().getBoardingMin();
@@ -72,9 +58,7 @@ public class Hostess extends Thread{
         return DepartAirport.getInstance().getCurrent_capacity();
     }
     private boolean getIsQueueEmpty(){
-
         return DepartAirport.getInstance().getIsQueueEmpty();
     }
-
 
 }
