@@ -1,6 +1,7 @@
 package Simulation.entities;
 
 import Simulation.locations.DepartAirport;
+import Simulation.locations.Plane;
 import Simulation.Start;
 public class Hostess extends Thread{
     
@@ -21,11 +22,18 @@ public class Hostess extends Thread{
         waitForNextFlight();
         prepareForPassBoarding();
         //este while pode ter o valor das variaveis desatualizado not sure yet
-        while(getCurrent_capacity() < getBoardingMin()|| (getCurrent_capacity() < getBoardingMax() && getIsQueueEmpty())){
+        while(getCurrent_capacity() < getBoardingMin() || (getCurrent_capacity() < getBoardingMax() && !getIsQueueEmpty())){
             waitForNextPassenger();
             checkDocuments(); 
         }
-        System.out.print(" BOARDING COMPLETA");
+        System.out.print(" CHECK COMPLETE \n");
+        
+        while(getCurrent_capacity() != Plane.getInstance().getCapacity()){//garantir que os passageiros estao todos dentro do aviao antes de levantar voo, é raro entrar aqui mas pode acontecer
+            waitBoarding();
+        }
+        
+        System.out.print(" BOARDING COMPLETE \n");
+        informPlaneReadyToTakeOff();
 
     }
 
@@ -47,6 +55,21 @@ public class Hostess extends Thread{
         DepartAirport.getInstance().checkDocuments();
     }
 
+   private void waitBoarding(){
+       Plane.getInstance().waitBoarding();
+   } 
+    
+    
+    private void informPlaneReadyToTakeOff(){
+        DepartAirport.getInstance().informPlaneReadyToTakeOff();
+
+    }
+    
+    
+    
+    
+    
+    
     
     private int getBoardingMin(){
         return DepartAirport.getInstance().getBoardingMin();

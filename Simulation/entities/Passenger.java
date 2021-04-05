@@ -28,6 +28,7 @@ public class Passenger extends Thread{
         travelToAirport();
         enterQueue();
         waitInQueue();
+        boardThePlane();
         inFlight();
     }
 
@@ -54,6 +55,10 @@ public class Passenger extends Thread{
         DepartAirport.getInstance().waitInQueue(this);
     }
     
+    private void boardThePlane(){
+        Plane.getInstance().boardThePlane(this);
+
+    }
     private void inFlight(){
         passenger_state = State.IN_FLIGHT;
         Plane.getInstance().waitForEndOfFlight();

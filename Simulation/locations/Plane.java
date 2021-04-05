@@ -12,17 +12,19 @@ public class Plane  {
 
     private ArrayList<Passenger> plane;
     private Pilot pilot;
-    private boolean flying;
-    
+    private Condition flying;
+    private Condition hostess;
+    private int flight_id = 0;
     private final Lock lock;
+    private boolean enter = false;
+    
     //private final Condition arrived;
    
     private Plane(){
         plane = new ArrayList<Passenger>();
-        flying = false;
         lock = new ReentrantLock();
-        //arrived = lock.newCondition();
-        
+        flying = lock.newCondition();
+        hostess = lock.newCondition();
     }
 
     // static method to create instance of Singleton class
@@ -46,18 +48,54 @@ public class Plane  {
     //---------------------------------------------------/Hostess methods/-----------------------------------------------------//
 
 
+    public void waitBoarding(){
+        lock.lock();
+        try{
+            while(!enter){
+                hostess.await();
+            }
+            enter = false;
 
+
+         }catch(Exception e){
+             System.out.println("Interrupter Exception Error - " + e.toString());
+         }finally{
+            lock.unlock();
+         }
+    }
 
 
     //---------------------------------------------------/Passenger methods/-----------------------------------------------------//
 
-    public void boardThePlane(){}
+    public void boardThePlane(Passenger person){
+        lock.lock();
+        try{
+            plane.add(person);
+            enter = true;
+            hostess.signal();
+            System.out.printf("passenger %d boarding plane \n", person.getId_passenger());
+
+
+
+         }catch(Exception e){
+             System.out.println("Interrupter Exception Error - " + e.toString());
+         }finally{
+             lock.unlock();
+         }
+
+
+    }
     
     public void waitForEndOfFlight(){
         lock.lock();
         try{
-           flying = true;
-           System.out.print("Plane is flying \n");
+            
+            flying.await();
+        
+            
+
+
+
         }catch(Exception e){
             System.out.println("Interrupter Exception Error - " + e.toString());
         }finally{
@@ -66,6 +104,15 @@ public class Plane  {
     }
     
     public void leaveThePlane(){}
+
+
+
+    //---------------------------------------------------/getters/setters/-----------------------------------------------------//
+
+    public int getCapacity(){
+        return plane.size();
+    }
+
 
 
 }

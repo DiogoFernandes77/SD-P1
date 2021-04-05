@@ -10,6 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import Simulation.Start;
 import Simulation.entities.Passenger;
+import Simulation.entities.Pilot;
 
 public class DepartAirport {
     private static DepartAirport depArp_instance = null;
@@ -22,6 +23,7 @@ public class DepartAirport {
     private boolean plane_rdy = false;
     private boolean showing = false;
     private boolean rdyCheck = false;
+    private boolean boardingComplete = false;
     //construct for the departure airport, know passenger, plane capacity, min and max of boarding
     private DepartAirport(){
         lock = new ReentrantLock();
@@ -64,10 +66,14 @@ public class DepartAirport {
     }
      
     //waits for the passenger enter in the plane until hostess gives the singal
-    public void waitForAllInBoarding(){
+    public void waitForAllInBoarding( ){
         lock.lock();
         try{
-           waitingFly.await();
+            while(!boardingComplete){
+                waitingFly.await();   
+           }
+           boardingComplete = false; 
+           
         }catch(Exception e){
             System.out.println("Interrupter Exception Error - " + e.toString());
         }finally{
@@ -138,7 +144,23 @@ public class DepartAirport {
     }
  
     //Hostess signals pilot that he can fly
-    public void informPlaneReadyToTakeOff(){}
+    public void informPlaneReadyToTakeOff(){
+        lock.lock();
+        try{
+            boardingComplete = true;
+            waitingFly.signal();
+
+        }catch(Exception e){
+            System.out.println("Interrupter Exception Error - " + e.toString());
+        }finally{
+            lock.unlock();
+        }
+
+
+
+
+
+    }
  
     //Hostess waits until next flight
     public void waitForNextFlight(){
@@ -180,15 +202,8 @@ public class DepartAirport {
             while(!(rdyCheck && (queue.peek().getId_passenger() == person.getId_passenger()))){// cada thread ve se hostess ta pronta e se é a vez deles
                 waitingCheck.await();;
             }
+            showDocuments(person);
             
-            showing = true;
-            waitingShow.signal();
-            System.out.printf("passenger %d  show documents \n", person.getId_passenger());
-
-            
-            //block state 2
-            waitingPassenger.await();
-            System.out.printf("passenger %d boarding plane \n", person.getId_passenger());
 
         }catch(Exception e){
             System.out.println("Interrupter Exception Error - " + e.toString());
@@ -199,11 +214,22 @@ public class DepartAirport {
     }
     
     //Passenger shows documents
-    public void showDocuments(){
+    public void showDocuments(Passenger person){
         lock.lock();
         try{
+            
+            showing = true;
             waitingShow.signal();
+            System.out.printf("passenger %d  show documents \n", person.getId_passenger());
+
+            
+            //block state 2
             waitingPassenger.await();
+            
+
+
+
+            
 
         }catch(Exception e){
             System.out.println("Interrupter Exception Error - " + e.toString());
@@ -212,7 +238,7 @@ public class DepartAirport {
         }
 
     }
-
+ //---------------------------------------------------/getters/setters/-----------------------------------------------------//
     public int getBoardingMin(){
         return boardMin;
     }

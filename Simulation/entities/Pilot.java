@@ -14,6 +14,11 @@ public class Pilot extends Thread{
         FLYING_BACK
     }
     private State pilot_state;
+    private int flight_passanger_number;
+
+   
+    
+    
     public Pilot(){
         pilot_state = State.AT_TRANSFER_GATE;
     }
@@ -26,6 +31,7 @@ public class Pilot extends Thread{
 
         informPlaneReadyForBoarding();
         waitForAllInBoarding();
+        System.out.print("PILOT: GOING TO FLY \n" );
 
 
     }
@@ -45,6 +51,12 @@ public class Pilot extends Thread{
 
 
 
+    public int getFlight_passanger_number() {
+        return this.flight_passanger_number;
+    }
 
+    public void setFlight_passanger_number(int flight_passanger_number) {
+        this.flight_passanger_number = flight_passanger_number;
+    }
 
 }
