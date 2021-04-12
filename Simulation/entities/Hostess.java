@@ -19,21 +19,26 @@ public class Hostess extends Thread{
     //implementation of the method run which establishes the thread operativeness
     @Override
     public void run(){
-        waitForNextFlight();
-        prepareForPassBoarding();
-        //este while pode ter o valor das variaveis desatualizado not sure yet
-        while(getCurrent_capacity() < getBoardingMin() || (getCurrent_capacity() < getBoardingMax() && !getIsQueueEmpty())){
-            waitForNextPassenger();
-            checkDocuments(); 
-        }
-        System.out.print(" CHECK COMPLETE \n");
+        // while(true){
+            
+            waitForNextFlight();
+            prepareForPassBoarding();
+            //este while pode ter o valor das variaveis desatualizado not sure yet
+            while(getCurrent_capacity() < getBoardingMin() || (getCurrent_capacity() < getBoardingMax() && !getIsQueueEmpty())){
+                waitForNextPassenger();
+                checkDocuments(); 
+            }
+            System.out.print(" CHECK COMPLETE \n");
+            
+            while(getCurrent_capacity() != Plane.getInstance().getCapacity()){//garantir que os passageiros estao todos dentro do aviao antes de levantar voo, é raro entrar aqui mas pode acontecer
+                waitBoarding();
+            }
+            
+            System.out.print(" BOARDING COMPLETE \n");
+            informPlaneReadyToTakeOff();
+        //}
         
-        while(getCurrent_capacity() != Plane.getInstance().getCapacity()){//garantir que os passageiros estao todos dentro do aviao antes de levantar voo, é raro entrar aqui mas pode acontecer
-            waitBoarding();
-        }
         
-        System.out.print(" BOARDING COMPLETE \n");
-        informPlaneReadyToTakeOff();
 
     }
 

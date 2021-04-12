@@ -1,6 +1,7 @@
 package Simulation.entities;
 
 import Simulation.locations.DepartAirport;
+import Simulation.locations.Plane;
 
 public class Pilot extends Thread{
 
@@ -32,6 +33,9 @@ public class Pilot extends Thread{
         informPlaneReadyForBoarding();
         waitForAllInBoarding();
         System.out.print("PILOT: GOING TO FLY \n" );
+        flyToDestinationPoint();
+        System.out.print("PILOT: ARrived \n" );
+        announceArrival();
 
 
     }
@@ -48,8 +52,14 @@ public class Pilot extends Thread{
         pilot_state = State.WAIT_FOR_BOARDING;
         DepartAirport.getInstance().waitForAllInBoarding();
     }
-
-
+    private void flyToDestinationPoint(){
+        pilot_state = State.FLYING_FORWARD;
+        Plane.getInstance().flyToDestinationPoint();
+    }
+    private void announceArrival(){
+        pilot_state = State.DEBOARDING;
+        Plane.getInstance().announceArrival();
+    }
 
     public int getFlight_passanger_number() {
         return this.flight_passanger_number;

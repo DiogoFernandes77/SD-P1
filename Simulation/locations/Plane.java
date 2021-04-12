@@ -3,9 +3,12 @@ package Simulation.locations;
 import Simulation.Start;
 import Simulation.entities.*;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.Random;
+
 public class Plane  {
     // static variable single_instance of type Singleton
     private static Plane plane_instance = null;
@@ -14,17 +17,24 @@ public class Plane  {
     private Pilot pilot;
     private Condition flying;
     private Condition hostess;
+    private Condition cd_deboarding;
     private int flight_id = 0;
     private final Lock lock;
     private boolean enter = false;
-    
+    private boolean plane_flying = false;
+    private boolean deboarding = false;
+
+    Random gen = new Random();
     //private final Condition arrived;
+    
    
     private Plane(){
         plane = new ArrayList<Passenger>();
         lock = new ReentrantLock();
         flying = lock.newCondition();
         hostess = lock.newCondition();
+        cd_deboarding = lock.newCondition();
+        
     }
 
     // static method to create instance of Singleton class
@@ -37,9 +47,44 @@ public class Plane  {
 
     //---------------------------------------------------/Pilot methods/-----------------------------------------------------//
     
-    public void flyToDestinationPoint(){}
+    public void flyToDestinationPoint(){
+        lock.lock();
+        int delay = gen.nextInt(10);
+        try{
+            
+            flying.await(delay, TimeUnit.SECONDS);
+            
+        }catch(Exception e){
+             System.out.println("Interrupter Exception Error - " + e.toString());
+         }finally{
+            lock.unlock();
+         }
+
+
+
+    }
     
-    public void announceArrival(){}
+    public void announceArrival(){
+        lock.lock();
+        
+        try{
+            plane_flying = false;
+            flying.signalAll();
+            while(deboarding){
+                cd_deboarding.await();
+            }
+        
+            
+        }catch(Exception e){
+             System.out.println("Interrupter Exception Error - " + e.toString());
+         }finally{
+            lock.unlock();
+         }
+
+
+
+
+    }
     
     public void flyToDeparturePoint(){}
 
@@ -89,8 +134,11 @@ public class Plane  {
     public void waitForEndOfFlight(){
         lock.lock();
         try{
+            plane_flying = true;
+            while(plane_flying){
+               flying.await(); 
+            }
             
-            flying.await();
         
             
 
