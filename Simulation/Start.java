@@ -1,9 +1,7 @@
 package Simulation;
-import Logging_Package.Logging;
+import Simulation.Log_file.Logging;
 import Simulation.entities.*;
 import Simulation.locations.*;
-
-import java.util.logging.Logger;
 
 public class Start{
     public static int n_passenger,boarding_max,boarding_min;
