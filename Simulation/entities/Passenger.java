@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.concurrent.locks.Condition;
 
 import Simulation.locations.DepartAirport;
+import Simulation.locations.DestAirport;
 import Simulation.locations.Plane;
 
 public class Passenger extends Thread{
@@ -29,7 +30,9 @@ public class Passenger extends Thread{
         enterQueue();
         waitInQueue();
         boardThePlane();
-        inFlight();
+        waitForEndOfFlight();
+        leaveThePlane();
+        death();
     }
 
     //Passenger time to go to airport between 0 and 10 sec
@@ -59,13 +62,26 @@ public class Passenger extends Thread{
         Plane.getInstance().boardThePlane(this);
 
     }
-    private void inFlight(){
+    private void waitForEndOfFlight(){
         passenger_state = State.IN_FLIGHT;
         Plane.getInstance().waitForEndOfFlight();
     }
     private void showDocuments(){
 
     }
+
+    private void leaveThePlane(){
+        passenger_state = State.AT_DESTINATION;
+        Plane.getInstance().leaveThePlane(this);
+    }
+    private void death(){
+        DestAirport.getInstance().Passenger_death();
+    }
+
+
+
+
+
 
     public int getId_passenger(){
     return id_passenger;

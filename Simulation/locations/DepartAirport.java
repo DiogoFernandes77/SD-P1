@@ -17,9 +17,17 @@ public class DepartAirport {
 
     private static int nPassenger, boardMin, boardMax;
     private int current_capacity = 0;
+    private int passenger_left;
+
+    
+
+    
+ 
+
     private final Lock lock;
     private final Condition waitingPlane, waitingPassenger,waitingCheck,waitingFly,waitingShow;
     private Queue<Passenger> queue ;
+    
     private boolean plane_rdy = false;
     private boolean showing = false;
     private boolean rdyCheck = false;
@@ -39,6 +47,7 @@ public class DepartAirport {
         nPassenger = Start.n_passenger;
         boardMin = Start.boarding_min;
         boardMax = Start.boarding_max;
+        passenger_left = nPassenger;
     }
 
     public static DepartAirport getInstance() {
@@ -80,6 +89,19 @@ public class DepartAirport {
             lock.unlock();
         }
     }
+    public void parkAtTransferGate(){
+        lock.lock();
+        
+        try{
+            System.out.println("PILOT: parking plane \n");
+            
+            System.out.printf("PILOT: passenger left = %d \n", passenger_left);
+        }catch(Exception e){
+             System.out.println("Interrupter Exception Error - " + e.toString());
+         }finally{
+            lock.unlock();
+         }
+    }
    
     //---------------------------------------------------/Hostess methods/-----------------------------------------------------//
 
@@ -117,6 +139,7 @@ public class DepartAirport {
             rdyCheck = false;
             waitingPassenger.signal();
             current_capacity++;
+            passenger_left--;
 
         }catch(Exception e){
             System.out.println("Interrupter Exception Error - " + e.toString());
@@ -169,7 +192,7 @@ public class DepartAirport {
             while(!plane_rdy){
                 waitingPlane.await();
             }
-
+            plane_rdy = false;
         }catch(Exception e){
             System.out.println("Interrupter Exception Error - " + e.toString());
         }finally{
@@ -239,6 +262,10 @@ public class DepartAirport {
 
     }
  //---------------------------------------------------/getters/setters/-----------------------------------------------------//
+    public int getPassenger_left() {
+    return this.passenger_left;
+    }
+
     public int getBoardingMin(){
         return boardMin;
     }
@@ -252,5 +279,8 @@ public class DepartAirport {
         return queue.isEmpty();
     }
 
-
+    public boolean stillPassenger(){
+        
+        return (passenger_left != 0);
+    }
 }

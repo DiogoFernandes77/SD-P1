@@ -12,6 +12,7 @@ public class Hostess extends Thread{
         READY_TO_FLY
     }
     private State hostess_state;
+    private boolean end_flag = false;
     public Hostess(){
         hostess_state = State.WAIT_FOR_NEXT_FLIGHT;
     }
@@ -19,12 +20,17 @@ public class Hostess extends Thread{
     //implementation of the method run which establishes the thread operativeness
     @Override
     public void run(){
-        // while(true){
+        do{
             
             waitForNextFlight();
             prepareForPassBoarding();
             //este while pode ter o valor das variaveis desatualizado not sure yet
-            while(getCurrent_capacity() < getBoardingMin() || (getCurrent_capacity() < getBoardingMax() && !getIsQueueEmpty())){
+            while(getCurrent_capacity() < getBoardingMin() || (getCurrent_capacity() < getBoardingMax() && !getIsQueueEmpty()) ){
+                if(getPassenger_left() == 0){
+                
+                    System.out.println("LAST PASSENGER FLIGHT \n");
+                    break;
+                }
                 waitForNextPassenger();
                 checkDocuments(); 
             }
@@ -36,9 +42,9 @@ public class Hostess extends Thread{
             
             System.out.print(" BOARDING COMPLETE \n");
             informPlaneReadyToTakeOff();
-        //}
+        }while(stillPassenger());
         
-        
+        System.out.println("HOSTESS RUNS ENDED \n");
 
     }
 
@@ -69,12 +75,19 @@ public class Hostess extends Thread{
         DepartAirport.getInstance().informPlaneReadyToTakeOff();
 
     }
+    private int getPassenger_left(){
+        return DepartAirport.getInstance().getPassenger_left();
+
+
+
+    }
     
     
     
     
-    
-    
+    private boolean stillPassenger(){
+        return DepartAirport.getInstance().stillPassenger();
+    }
     
     private int getBoardingMin(){
         return DepartAirport.getInstance().getBoardingMin();

@@ -29,21 +29,27 @@ public class Pilot extends Thread{
     @Override
     public void run(){
        
+        do{
+            informPlaneReadyForBoarding();
+            waitForAllInBoarding();
+            System.out.print("PILOT: GOING TO FLY \n" );
+            flyToDestinationPoint();
+            System.out.print("PILOT: Arrived \n" );
+            announceArrival();
+            flyToDeparturePoint();
+            parkAtTransferGate();
 
-        informPlaneReadyForBoarding();
-        waitForAllInBoarding();
-        System.out.print("PILOT: GOING TO FLY \n" );
-        flyToDestinationPoint();
-        System.out.print("PILOT: ARrived \n" );
-        announceArrival();
 
-
+        }while(stillPassenger());
+        
+        System.out.println("PILOT RUNS ENDED \n");
+    
     }
 
     private void informPlaneReadyForBoarding(){
-        try{
-            Thread.sleep(2000);
-        }catch(Exception e){}
+        
+        
+        
         pilot_state = State.READY_FOR_BOARDING;
         DepartAirport.getInstance().informPlaneReadyForBoarding();
         
@@ -61,10 +67,37 @@ public class Pilot extends Thread{
         Plane.getInstance().announceArrival();
     }
 
+    
+    private void flyToDeparturePoint(){
+        pilot_state = State.FLYING_BACK;
+        Plane.getInstance().flyToDeparturePoint();
+    }
+    
+    private void parkAtTransferGate(){
+        pilot_state = State.AT_TRANSFER_GATE;
+        DepartAirport.getInstance().parkAtTransferGate();
+
+    }
+    
+    
+    
+    
+    
+    public boolean stillPassenger(){
+        return DepartAirport.getInstance().stillPassenger();
+    }
+    
+    
     public int getFlight_passanger_number() {
         return this.flight_passanger_number;
     }
 
+    
+    
+    
+    
+    
+    
     public void setFlight_passanger_number(int flight_passanger_number) {
         this.flight_passanger_number = flight_passanger_number;
     }

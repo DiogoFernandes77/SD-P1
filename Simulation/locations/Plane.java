@@ -22,7 +22,7 @@ public class Plane  {
     private final Lock lock;
     private boolean enter = false;
     private boolean plane_flying = false;
-    private boolean deboarding = false;
+    
 
     Random gen = new Random();
     //private final Condition arrived;
@@ -49,7 +49,7 @@ public class Plane  {
     
     public void flyToDestinationPoint(){
         lock.lock();
-        int delay = gen.nextInt(10);
+        int delay = gen.nextInt(3);
         try{
             
             flying.await(delay, TimeUnit.SECONDS);
@@ -70,10 +70,10 @@ public class Plane  {
         try{
             plane_flying = false;
             flying.signalAll();
-            while(deboarding){
+            while(!plane.isEmpty()){
                 cd_deboarding.await();
             }
-        
+            System.out.println("PILOT: deboarding complete \n");
             
         }catch(Exception e){
              System.out.println("Interrupter Exception Error - " + e.toString());
@@ -86,8 +86,22 @@ public class Plane  {
 
     }
     
-    public void flyToDeparturePoint(){}
+    public void flyToDeparturePoint(){
+        lock.lock();
+        int delay = gen.nextInt(3);
+        try{
+            System.out.println("PILOT: Flying back \n");
+            flying.await(delay, TimeUnit.SECONDS);
+            
+        }catch(Exception e){
+             System.out.println("Interrupter Exception Error - " + e.toString());
+         }finally{
+            lock.unlock();
+         }
 
+    }
+
+    
 
 
     //---------------------------------------------------/Hostess methods/-----------------------------------------------------//
@@ -151,7 +165,26 @@ public class Plane  {
         }
     }
     
-    public void leaveThePlane(){}
+    public void leaveThePlane(Passenger person){
+        lock.lock();
+        try{
+            
+            plane.remove(person);
+            cd_deboarding.signal();
+            System.out.printf("Passenger %d leaving the plane \n", person.getId_passenger());
+        
+            
+
+
+
+        }catch(Exception e){
+            System.out.println("Interrupter Exception Error - " + e.toString());
+        }finally{
+            lock.unlock();
+        }
+
+
+    }
 
 
 
