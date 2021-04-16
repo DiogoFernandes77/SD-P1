@@ -65,7 +65,18 @@ public class Plane  {
     }
     
     public void setFlightId(int id){
-        flight_id = id;
+        lock.lock();
+        
+        try{
+            flight_id = id;
+            
+            
+        }catch(Exception e){
+            System.out.println("Interrupter Exception Error - " + e.toString());
+         }finally{
+            lock.unlock();
+         }
+        
     }
     
     public void announceArrival(){
