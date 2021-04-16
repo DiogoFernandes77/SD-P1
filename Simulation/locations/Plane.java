@@ -64,6 +64,10 @@ public class Plane  {
 
     }
     
+    public void setFlightId(int id){
+        flight_id = id;
+    }
+    
     public void announceArrival(){
         lock.lock();
         

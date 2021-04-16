@@ -16,7 +16,7 @@ public class Pilot extends Thread{
     }
     private State pilot_state;
     private int flight_passanger_number;
-
+    private int id_to_set = 0;
    
     
     
@@ -47,8 +47,8 @@ public class Pilot extends Thread{
     }
 
     private void informPlaneReadyForBoarding(){
-        
-        
+        id_to_set++;
+        Plane.getInstance().setFlightId(id_to_set);
         
         pilot_state = State.READY_FOR_BOARDING;
         DepartAirport.getInstance().informPlaneReadyForBoarding();
