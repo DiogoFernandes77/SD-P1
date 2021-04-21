@@ -12,6 +12,7 @@ import Simulation.entities.Pilot;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Queue;
 
 public class Logger_Class {
@@ -51,6 +52,7 @@ public class Logger_Class {
     public String createFile()
     {
        int file_id = checkFiles(); // check if exists files previously created
+        System.out.println("FIle id: " + file_id);
        file_name = directory_file + default_name + (file_id + 1) + extension_file; //
 
        try {
@@ -65,6 +67,7 @@ public class Logger_Class {
 
     //check current files
     private static int checkFiles() {
+        ArrayList<Integer> sort = new ArrayList<>();
         int fileId = 0;
         File dir = new File(directory_file);
         FilenameFilter filter = new FilenameFilter() {
@@ -86,10 +89,12 @@ public class Logger_Class {
                 String name_File = fullName[0];
                 String[] get_number = name_File.split("_");
                 fileId = Integer.parseInt(get_number[1]);
+                sort.add(fileId);
             }
         }
+        Collections.sort(sort);
 
-        return fileId;
+        return sort.get(sort.size()-1);
     }
 
     public Logger_Class() { ST_Passenger = new Passenger.State[Start.n_passenger]; }
