@@ -1,16 +1,14 @@
 package Simulation.locations;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import Simulation.Log_file.Logger_Class;
 import Simulation.Start;
 import Simulation.entities.Passenger;
-import Simulation.entities.Pilot;
 
 public class DepartAirport {
     private static DepartAirport depArp_instance = null;
@@ -18,11 +16,6 @@ public class DepartAirport {
     private static int nPassenger, boardMin, boardMax;
     private int current_capacity = 0;
     private int passenger_left;
-
-    
-
-    
- 
 
     private final Lock lock;
     private final Condition waitingPlane, waitingPassenger,waitingCheck,waitingFly,waitingShow;
@@ -48,6 +41,11 @@ public class DepartAirport {
         boardMin = Start.boarding_min;
         boardMax = Start.boarding_max;
         passenger_left = nPassenger;
+
+        synchronized (Logger_Class.class)
+        {
+            Logger_Class.getInstance().setQ(queue);
+        }
     }
 
     public static DepartAirport getInstance() {
@@ -113,7 +111,6 @@ public class DepartAirport {
             while(queue.isEmpty()){
                 waitingPassenger.await();
             }
-        
         }catch(Exception e){
             System.out.println("Interrupter Exception Error - " + e.toString());
         }finally{
@@ -146,7 +143,6 @@ public class DepartAirport {
         }finally{
             lock.unlock();
         }
-
     }
 
     //Hostess waits for the passengers
@@ -163,7 +159,6 @@ public class DepartAirport {
         }finally{
             lock.unlock();
         }
-
     }
  
     //Hostess signals pilot that he can fly
@@ -173,16 +168,14 @@ public class DepartAirport {
             boardingComplete = true;
             waitingFly.signal();
 
+            synchronized(Logger_Class.class){
+                Logger_Class.getInstance().departed(current_capacity);
+            }
         }catch(Exception e){
             System.out.println("Interrupter Exception Error - " + e.toString());
         }finally{
             lock.unlock();
         }
-
-
-
-
-
     }
  
     //Hostess waits until next flight
@@ -208,6 +201,10 @@ public class DepartAirport {
         try{
             System.out.printf("passenger %d enters queue \n", person.getId_passenger());
             queue.add(person);
+            synchronized (Logger_Class.class)
+            {
+                Logger_Class.getInstance().setQ(queue);
+            }
         
         }catch(Exception e){
             System.out.println("Interrupter Exception Error - " + e.toString());
@@ -226,7 +223,6 @@ public class DepartAirport {
                 waitingCheck.await();;
             }
             showDocuments(person);
-            
 
         }catch(Exception e){
             System.out.println("Interrupter Exception Error - " + e.toString());
@@ -244,16 +240,11 @@ public class DepartAirport {
             showing = true;
             waitingShow.signal();
             System.out.printf("passenger %d  show documents \n", person.getId_passenger());
-
-            
+            synchronized(Logger_Class.class){
+                Logger_Class.getInstance().pass_check( ": passenger " + person.getId_passenger() + " checked.\n");
+            }
             //block state 2
             waitingPassenger.await();
-            
-
-
-
-            
-
         }catch(Exception e){
             System.out.println("Interrupter Exception Error - " + e.toString());
         }finally{

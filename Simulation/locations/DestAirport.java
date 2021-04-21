@@ -3,17 +3,13 @@ package Simulation.locations;
 public class DestAirport{
     
     private static DestAirport destArp_instance = null;
-    
-    
-    
+
     private DestAirport(){
-        
-        
     }
 
     public static DestAirport getInstance() {
         if (destArp_instance == null)
-        destArp_instance = new DestAirport();
+            destArp_instance = new DestAirport();
         return destArp_instance;
     }
     
@@ -26,12 +22,6 @@ public class DestAirport{
     //Passenger death 
     public void Passenger_death(){
         //kill every thread -> passenger that's is on the plane
-
     }
-        
 
-    
-
-
-   
 } 

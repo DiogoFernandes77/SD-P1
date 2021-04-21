@@ -1,5 +1,5 @@
 package Simulation;
-import Simulation.Log_file.Logging;
+import Simulation.Log_file.Logger_Class;
 import Simulation.entities.*;
 import Simulation.locations.*;
 
@@ -7,7 +7,6 @@ public class Start{
     public static int n_passenger,boarding_max,boarding_min;
 
     public static void main(String[] args) throws InterruptedException{
-        String file_name = "logger.txt"; // logger file
 
         if(args.length == 3){//custom config
             try{
@@ -31,7 +30,8 @@ public class Start{
         }
 
         // create and write log file
-        Logging logger = new Logging(file_name); // write logs of a application
+        // write logs of a application
+
 
         //Initializing locations
         DepartAirport departAirport = DepartAirport.getInstance();
@@ -41,10 +41,16 @@ public class Start{
         //Initializing entities Threads
         Pilot pil = new Pilot();
         Hostess hos = new Hostess();
-        logger.add_struct(n_passenger);
         Passenger[] passengers = new Passenger[n_passenger];
+
         for (int id = 0; id < n_passenger; id++){
             passengers[id] = new Passenger(id);
+        }
+
+        // Initialize Logger
+        synchronized (Logger_Class.class)
+        {
+            Logger_Class.getInstance().init();
         }
 
         //Start entities Thread
@@ -70,6 +76,11 @@ public class Start{
             System.out.println("Interrupter Exception Error - " + ex.toString());
         }
 
+        //Air sum up
+        synchronized (Logger_Class.class)
+        {
+            Logger_Class.getInstance().summary();
+        }
 
     }
 }

@@ -1,6 +1,6 @@
 package Simulation.locations;
 
-import Simulation.Start;
+import Simulation.Log_file.Logger_Class;
 import Simulation.entities.*;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -12,7 +12,6 @@ import java.util.Random;
 public class Plane  {
     // static variable single_instance of type Singleton
     private static Plane plane_instance = null;
-
     private ArrayList<Passenger> plane;
     private Pilot pilot;
     private Condition flying;
@@ -22,19 +21,20 @@ public class Plane  {
     private final Lock lock;
     private boolean enter = false;
     private boolean plane_flying = false;
-    
 
     Random gen = new Random();
     //private final Condition arrived;
-    
-   
+
     private Plane(){
         plane = new ArrayList<Passenger>();
         lock = new ReentrantLock();
         flying = lock.newCondition();
         hostess = lock.newCondition();
         cd_deboarding = lock.newCondition();
-        
+        synchronized (Logger_Class.class)
+        {
+            Logger_Class.getInstance().setIN_F(plane);
+        }
     }
 
     // static method to create instance of Singleton class
@@ -46,42 +46,31 @@ public class Plane  {
     
 
     //---------------------------------------------------/Pilot methods/-----------------------------------------------------//
-    
     public void flyToDestinationPoint(){
         lock.lock();
         int delay = gen.nextInt(3);
         try{
-            
             flying.await(delay, TimeUnit.SECONDS);
-            
         }catch(Exception e){
              System.out.println("Interrupter Exception Error - " + e.toString());
          }finally{
             lock.unlock();
          }
-
-
-
     }
     
     public void setFlightId(int id){
         lock.lock();
-        
         try{
             flight_id = id;
-            
-            
         }catch(Exception e){
             System.out.println("Interrupter Exception Error - " + e.toString());
          }finally{
             lock.unlock();
          }
-        
     }
-    
+
     public void announceArrival(){
         lock.lock();
-        
         try{
             plane_flying = false;
             flying.signalAll();
@@ -89,16 +78,11 @@ public class Plane  {
                 cd_deboarding.await();
             }
             System.out.println("PILOT: deboarding complete \n");
-            
         }catch(Exception e){
              System.out.println("Interrupter Exception Error - " + e.toString());
          }finally{
             lock.unlock();
          }
-
-
-
-
     }
     
     public void flyToDeparturePoint(){
@@ -107,21 +91,14 @@ public class Plane  {
         try{
             System.out.println("PILOT: Flying back \n");
             flying.await(delay, TimeUnit.SECONDS);
-            
         }catch(Exception e){
              System.out.println("Interrupter Exception Error - " + e.toString());
          }finally{
             lock.unlock();
          }
-
     }
 
-    
-
-
     //---------------------------------------------------/Hostess methods/-----------------------------------------------------//
-
-
     public void waitBoarding(){
         lock.lock();
         try{
@@ -129,8 +106,6 @@ public class Plane  {
                 hostess.await();
             }
             enter = false;
-
-
          }catch(Exception e){
              System.out.println("Interrupter Exception Error - " + e.toString());
          }finally{
@@ -138,9 +113,7 @@ public class Plane  {
          }
     }
 
-
     //---------------------------------------------------/Passenger methods/-----------------------------------------------------//
-
     public void boardThePlane(Passenger person){
         lock.lock();
         try{
@@ -148,8 +121,6 @@ public class Plane  {
             enter = true;
             hostess.signal();
             System.out.printf("passenger %d boarding plane \n", person.getId_passenger());
-
-
 
          }catch(Exception e){
              System.out.println("Interrupter Exception Error - " + e.toString());
@@ -167,12 +138,6 @@ public class Plane  {
             while(plane_flying){
                flying.await(); 
             }
-            
-        
-            
-
-
-
         }catch(Exception e){
             System.out.println("Interrupter Exception Error - " + e.toString());
         }finally{
@@ -183,32 +148,20 @@ public class Plane  {
     public void leaveThePlane(Passenger person){
         lock.lock();
         try{
-            
             plane.remove(person);
             cd_deboarding.signal();
             System.out.printf("Passenger %d leaving the plane \n", person.getId_passenger());
-        
-            
-
-
 
         }catch(Exception e){
             System.out.println("Interrupter Exception Error - " + e.toString());
         }finally{
             lock.unlock();
         }
-
-
     }
 
-
-
     //---------------------------------------------------/getters/setters/-----------------------------------------------------//
-
     public int getCapacity(){
         return plane.size();
     }
-
-
 
 }
