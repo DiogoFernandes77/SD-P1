@@ -20,7 +20,7 @@ public class Plane  {
     private int flight_id = 0;
     private final Lock lock;
     private boolean enter = false;
-    private boolean plane_flying = false;
+    private boolean plane_flying = true;
 
     Random gen = new Random();
     //private final Condition arrived;
@@ -48,9 +48,9 @@ public class Plane  {
     //---------------------------------------------------/Pilot methods/-----------------------------------------------------//
     public void flyToDestinationPoint(){
         lock.lock();
-        int delay = gen.nextInt(3);
+        int delay = gen.nextInt(10);
         try{
-            flying.await(delay, TimeUnit.SECONDS);
+            flying.await(delay, TimeUnit.MILLISECONDS);
         }catch(Exception e){
              System.out.println("Interrupter Exception Error - " + e.toString());
          }finally{
@@ -87,10 +87,11 @@ public class Plane  {
     
     public void flyToDeparturePoint(){
         lock.lock();
-        int delay = gen.nextInt(3);
+        int delay = gen.nextInt(10);
         try{
             System.out.println("PILOT: Flying back \n");
-            flying.await(delay, TimeUnit.SECONDS);
+            plane_flying = true;
+            flying.await(delay, TimeUnit.MILLISECONDS);
         }catch(Exception e){
              System.out.println("Interrupter Exception Error - " + e.toString());
          }finally{
@@ -134,7 +135,7 @@ public class Plane  {
     public void waitForEndOfFlight(){
         lock.lock();
         try{
-            plane_flying = true;
+            
             while(plane_flying){
                flying.await(); 
             }

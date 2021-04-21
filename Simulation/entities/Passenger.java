@@ -36,6 +36,7 @@ public class Passenger extends Thread{
         travelToAirport();
         enterQueue();
         waitInQueue();
+        showDocuments();
         boardThePlane();
         waitForEndOfFlight();
         leaveThePlane();
@@ -47,7 +48,7 @@ public class Passenger extends Thread{
         Random gen = new Random();
         int time = gen.nextInt(10);
         try{
-            Thread.sleep(time * 1000); 
+            Thread.sleep(time * 100); 
         }catch(Exception e){
             System.out.print("Error traveling to airport");
         }
@@ -73,7 +74,17 @@ public class Passenger extends Thread{
         }
         DepartAirport.getInstance().waitInQueue(this);
     }
-    
+    private void showDocuments(){
+        DepartAirport.getInstance().showDocuments(this);
+
+
+        
+    }
+
+
+
+
+
     private void boardThePlane(){
         Plane.getInstance().boardThePlane(this);
 
@@ -86,21 +97,22 @@ public class Passenger extends Thread{
         }
         Plane.getInstance().waitForEndOfFlight();
     }
-    private void showDocuments(){
-
-    }
+    
 
     private void leaveThePlane(){
+        
+        Plane.getInstance().leaveThePlane(this);
+    }
+    private void death(){
+        
         passenger_state = State.AT_DESTINATION;
 
         synchronized (Logger_Class.class) {
             Logger_Class.getInstance().setST_Passenger(id_passenger, passenger_state);
             Logger_Class.getInstance().log_write("Passenger " + id_passenger + " is at destination");
         }
-        Plane.getInstance().leaveThePlane(this);
-    }
-    private void death(){
-        DestAirport.getInstance().Passenger_death();
+        
+        DestAirport.getInstance().Passenger_death(this);
     }
 
     public int getId_passenger(){

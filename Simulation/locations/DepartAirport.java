@@ -222,7 +222,7 @@ public class DepartAirport {
             while(!(rdyCheck && (queue.peek().getId_passenger() == person.getId_passenger()))){// cada thread ve se hostess ta pronta e se é a vez deles
                 waitingCheck.await();;
             }
-            showDocuments(person);
+            
 
         }catch(Exception e){
             System.out.println("Interrupter Exception Error - " + e.toString());

@@ -76,11 +76,14 @@ public class Start{
             System.out.println("Interrupter Exception Error - " + ex.toString());
         }
 
+
         //Air sum up
         synchronized (Logger_Class.class)
         {
             Logger_Class.getInstance().summary();
         }
 
+
+        System.out.println("-------------------------Simulation Ended-----------------------------");
     }
 }

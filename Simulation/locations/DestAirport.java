@@ -1,10 +1,15 @@
 package Simulation.locations;
 
+import java.util.ArrayList;
+
+import Simulation.entities.Passenger;
+
 public class DestAirport{
     
     private static DestAirport destArp_instance = null;
-
+    private ArrayList<Passenger> passenger_arrived;
     private DestAirport(){
+        passenger_arrived = new ArrayList<Passenger>();
     }
 
     public static DestAirport getInstance() {
@@ -19,9 +24,10 @@ public class DestAirport{
 
     //---------------------------------------------------/Passenger methods/-----------------------------------------------------//
     
-    //Passenger death 
-    public void Passenger_death(){
-        //kill every thread -> passenger that's is on the plane
+    //Passenger death, adds himself to the list of passenger that arrived
+    public void Passenger_death(Passenger person){
+            passenger_arrived.add(person);
+
     }
 
 } 
