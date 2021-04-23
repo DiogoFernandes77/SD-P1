@@ -205,7 +205,7 @@ public class Logger_Class {
                 struct_string.append(Passenger_state[ST_Passenger[i].ordinal()]).append(" ");
             }
             //struct_string.append("\t").append("\t").append(ATL.size());
-            struct_string.append("\t").append(Q.size()).append("\t").append(IN_F.size()).append("\t");
+            struct_string.append(Q.size()).append("\t").append(IN_F.size()).append("\t").append(ATL.size());
             struct_string.append("\n");
 
             fileWriter.write(struct_string.toString());
