@@ -16,8 +16,17 @@ public class Start{
             }catch(Exception e){
                 System.out.print("Args must be numbers \n");
                 System.exit(1);
+            
             }
-           System.out.print("Config Ok \n");
+            if(n_passenger == 0){
+                System.out.print(" Nº passenger can't be 0 \n");
+                System.exit(1);
+            }
+            if(boarding_max < boarding_min){
+                System.out.print(" Boarding max needs to be higher than boarding_min \n");
+                System.exit(1);
+            }
+            System.out.print("Config Ok \n");
         }else if(args.length == 0){//default config
             n_passenger = 21;
             boarding_max = 8;

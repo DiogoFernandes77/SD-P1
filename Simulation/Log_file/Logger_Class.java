@@ -131,7 +131,7 @@ public class Logger_Class {
             for(int i = 0; i < n_passenger; i ++){
                 fileWriter.write(Passenger_state[0] + " ");
             }
-            fileWriter.write("\t0\t0\t0\n");
+            fileWriter.write("0\t0\t0\n");
             fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -205,7 +205,7 @@ public class Logger_Class {
                 struct_string.append(Passenger_state[ST_Passenger[i].ordinal()]).append(" ");
             }
             //struct_string.append("\t").append("\t").append(ATL.size());
-            struct_string.append(Q.size()).append("\t").append(IN_F.size()).append("\t").append(ATL.size());
+            struct_string.append("\t").append(Q.size()).append("\t").append(IN_F.size()).append("\t").append(ATL.size());
             struct_string.append("\n");
 
             fileWriter.write(struct_string.toString());
