@@ -81,7 +81,6 @@ public class Logger_Class {
         String files[] = dir.list(filter);
         if(files.length == 0){
             System.out.println("Logger files not created\n");
-            fileId = 0;
         }
         else{
             for(String fileName : files){
@@ -90,11 +89,13 @@ public class Logger_Class {
                 String[] get_number = name_File.split("_");
                 fileId = Integer.parseInt(get_number[1]);
                 sort.add(fileId);
+                Collections.sort(sort);
+
+                fileId = sort.get(sort.size()-1);
             }
         }
-        Collections.sort(sort);
 
-        return sort.get(sort.size()-1);
+        return fileId;
     }
 
     public Logger_Class() { ST_Passenger = new Passenger.State[Start.n_passenger]; }
