@@ -25,6 +25,7 @@ public class DepartAirport {
     private boolean showing = false;
     private boolean rdyCheck = false;
     private boolean boardingComplete = false;
+    private boolean block_state2 = false;
     //construct for the departure airport, know passenger, plane capacity, min and max of boarding
     private DepartAirport(){
         lock = new ReentrantLock();
@@ -149,7 +150,9 @@ public class DepartAirport {
     public void waitForNextPassenger(){
         lock.lock();
         try{
+            block_state2 = true;
             waitingPassenger.signal();
+            
             System.out.print("Hostess waiting passanger \n");
             while(queue.isEmpty()){
                 waitingPassenger.await(); 
@@ -217,6 +220,7 @@ public class DepartAirport {
     public void waitInQueue(Passenger person){   
         lock.lock();
         try{
+            
             waitingPassenger.signal();
             System.out.printf("passenger %d wait for check \n", person.getId_passenger());
             while(!(rdyCheck && (queue.peek().getId_passenger() == person.getId_passenger()))){// cada thread ve se hostess ta pronta e se é a vez deles
@@ -244,7 +248,10 @@ public class DepartAirport {
                 Logger_Class.getInstance().pass_check( ": passenger " + person.getId_passenger() + " checked.\n");
             }
             //block state 2
-            waitingPassenger.await();
+            while(!block_state2){
+                waitingPassenger.await(); 
+            }
+            block_state2 = false;
         }catch(Exception e){
             System.out.println("Interrupter Exception Error - " + e.toString());
         }finally{
