@@ -1,3 +1,8 @@
+/**
+ *  Log Class to produce log file each initiation
+ *  @author António Ramos e Diogo Fernandes
+ */
+
 package Simulation.locations;
 
 import java.util.LinkedList;
@@ -37,7 +42,6 @@ public class DepartAirport {
         waitingShow = lock.newCondition();
         waitingFly = lock.newCondition();
         
-        //Penso que esta é a melhor forma de passar as variaveis
         nPassenger = Start.n_passenger;
         boardMin = Start.boarding_min;
         boardMax = Start.boarding_max;
@@ -55,7 +59,6 @@ public class DepartAirport {
         return depArp_instance;
     }
 
-    
     //---------------------------------------------------/Pilot methods/-----------------------------------------------------//
     
     //Signals Hostess that plane is ready to board
@@ -88,9 +91,9 @@ public class DepartAirport {
             lock.unlock();
         }
     }
+
     public void parkAtTransferGate(){
         lock.lock();
-        
         try{
             System.out.println("PILOT: parking plane \n");
             
@@ -138,7 +141,6 @@ public class DepartAirport {
             waitingPassenger.signal();
             current_capacity++;
             passenger_left--;
-
         }catch(Exception e){
             System.out.println("Interrupter Exception Error - " + e.toString());
         }finally{
@@ -152,7 +154,6 @@ public class DepartAirport {
         try{
             block_state2 = true;
             waitingPassenger.signal();
-            
             System.out.print("Hostess waiting passanger \n");
             while(queue.isEmpty()){
                 waitingPassenger.await(); 
@@ -170,7 +171,6 @@ public class DepartAirport {
         try{
             boardingComplete = true;
             waitingFly.signal();
-
             synchronized(Logger_Class.class){
                 Logger_Class.getInstance().departed(current_capacity);
             }
@@ -208,7 +208,6 @@ public class DepartAirport {
             {
                 Logger_Class.getInstance().setQ(queue);
             }
-        
         }catch(Exception e){
             System.out.println("Interrupter Exception Error - " + e.toString());
         }finally{
@@ -220,27 +219,22 @@ public class DepartAirport {
     public void waitInQueue(Passenger person){   
         lock.lock();
         try{
-            
             waitingPassenger.signal();
             System.out.printf("passenger %d wait for check \n", person.getId_passenger());
             while(!(rdyCheck && (queue.peek().getId_passenger() == person.getId_passenger()))){// cada thread ve se hostess ta pronta e se é a vez deles
                 waitingCheck.await();;
             }
-            
-
         }catch(Exception e){
             System.out.println("Interrupter Exception Error - " + e.toString());
         }finally{
             lock.unlock();
         }
-
     }
     
     //Passenger shows documents
     public void showDocuments(Passenger person){
         lock.lock();
         try{
-            
             showing = true;
             waitingShow.signal();
             System.out.printf("passenger %d  show documents \n", person.getId_passenger());
@@ -257,13 +251,11 @@ public class DepartAirport {
         }finally{
             lock.unlock();
         }
-
     }
  //---------------------------------------------------/getters/setters/-----------------------------------------------------//
     public int getPassenger_left() {
     return this.passenger_left;
     }
-
     public int getBoardingMin(){
         return boardMin;
     }
@@ -276,9 +268,5 @@ public class DepartAirport {
     public boolean getIsQueueEmpty(){
         return queue.isEmpty();
     }
-
-    public boolean stillPassenger(){
-        
-        return (passenger_left != 0);
-    }
+    public boolean stillPassenger(){ return (passenger_left != 0); }
 }

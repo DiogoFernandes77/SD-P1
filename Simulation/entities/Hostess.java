@@ -1,11 +1,16 @@
+/**
+ *  Log Class to produce log file each initiation
+ *  @author António Ramos e Diogo Fernandes
+ */
+
 package Simulation.entities;
 
 import Simulation.Log_file.Logger_Class;
 import Simulation.locations.DepartAirport;
 import Simulation.locations.Plane;
 
+
 public class Hostess extends Thread{
-    
     public enum State{
         WAIT_FOR_NEXT_FLIGHT,
         WAIT_FOR_PASSENGER,
@@ -30,7 +35,6 @@ public class Hostess extends Thread{
             
             waitForNextFlight();
             prepareForPassBoarding();
-            //este while pode ter o valor das variaveis desatualizado not sure yet
             while(getCurrent_capacity() < getBoardingMin() || (getCurrent_capacity() < getBoardingMax() && !getIsQueueEmpty()) ){
                 if(getPassenger_left() == 0){
                 
@@ -61,6 +65,7 @@ public class Hostess extends Thread{
         }
         DepartAirport.getInstance().waitForNextFlight();
     }
+
     private void prepareForPassBoarding(){
         hostess_state = State.WAIT_FOR_PASSENGER;
         synchronized (Logger_Class.class)
@@ -70,6 +75,7 @@ public class Hostess extends Thread{
         }
         DepartAirport.getInstance().prepareForPassBoarding();
     }
+
     private void waitForNextPassenger(){
         hostess_state = State.WAIT_FOR_PASSENGER;
         synchronized (Logger_Class.class)

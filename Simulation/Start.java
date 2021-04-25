@@ -1,3 +1,8 @@
+/**
+ *  Log Class to produce log file each initiation
+ *  @author António Ramos e Diogo Fernandes
+ */
+
 package Simulation;
 import Simulation.Log_file.Logger_Class;
 import Simulation.entities.*;

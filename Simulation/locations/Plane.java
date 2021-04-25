@@ -1,3 +1,8 @@
+/**
+ *  Log Class to produce log file each initiation
+ *  @author António Ramos e Diogo Fernandes
+ */
+
 package Simulation.locations;
 
 import Simulation.Log_file.Logger_Class;
@@ -43,7 +48,6 @@ public class Plane  {
             plane_instance = new Plane();
         return plane_instance;
     }
-    
 
     //---------------------------------------------------/Pilot methods/-----------------------------------------------------//
     public void flyToDestinationPoint(){
@@ -128,14 +132,11 @@ public class Plane  {
          }finally{
              lock.unlock();
          }
-
-
     }
     
     public void waitForEndOfFlight(){
         lock.lock();
         try{
-            
             while(plane_flying){
                flying.await(); 
             }
@@ -164,5 +165,4 @@ public class Plane  {
     public int getCapacity(){
         return plane.size();
     }
-
 }

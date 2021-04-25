@@ -17,26 +17,26 @@ import java.util.Queue;
 
 public class Logger_Class {
     //implements singleton for repository information about what happens in the simulation, gives output file
-    private static Logger_Class loggerClass = null;
+    private static Logger_Class loggerClass = null; // instance of Logger_Class
 
     private static String file_name; // name file
     private final static String directory_file = "Simulation/Log_file/"; // where output files is stored
     private final static String default_name = "Logger_"; //default name
     private final static String extension_file = ".txt"; //extension file
 
-    public ArrayList<String> Summary = new ArrayList<>();
+    public ArrayList<String> Summary = new ArrayList<>(); // struct to save what happened in each file
 
     //auxiliar variables
     int FN; // number of flight
     public Passenger.State[] ST_Passenger; // State of the Passengers; save state of each passenger
-    public Pilot.State ST_Pilot;
-    public Hostess.State ST_Hostess;
+    public Pilot.State ST_Pilot; // State of the Pilot
+    public Hostess.State ST_Hostess; // State of the Hostess
 
     private ArrayList<Passenger> Q; // State of the waiting queue
     private ArrayList<Passenger> IN_F; // State of in flight
     private ArrayList<Passenger> ATL; // State of number of passengers that have already arrived at their destination
 
-    private static FileWriter fileWriter;
+    private static FileWriter fileWriter; // Write on file
 
     //pilot variables abbreviate
     public String[] Pilot_state = new String[] {"ATRG", "RDFB","WTFB", "FLFW", "DRPP", "FLBK"};
@@ -52,8 +52,7 @@ public class Logger_Class {
     public String createFile()
     {
        int file_id = checkFiles(); // check if exists files previously created
-        System.out.println("FIle id: " + file_id);
-       file_name = directory_file + default_name + (file_id + 1) + extension_file; //
+       file_name = directory_file + default_name + (file_id + 1) + extension_file; //output file
 
        try {
            fileWriter = new FileWriter(file_name);
@@ -61,14 +60,14 @@ public class Logger_Class {
        } catch (IOException e) {
            e.printStackTrace();
        }
-
         return file_name;
     }
 
     //check current files
     private static int checkFiles() {
-        ArrayList<Integer> sort = new ArrayList<>();
-        int fileId = 0;
+        ArrayList<Integer> sort = new ArrayList<>(); // sort ids of files
+        int fileId = 0; // file id
+        // open directory and filters extentions
         File dir = new File(directory_file);
         FilenameFilter filter = new FilenameFilter() {
             @Override
@@ -81,8 +80,10 @@ public class Logger_Class {
         String files[] = dir.list(filter);
         if(files.length == 0){
             System.out.println("Logger files not created\n");
+            exit(1);
         }
         else{
+            // loop for each file and split name
             for(String fileName : files){
                 String fullName[] = fileName.split(extension_file);
                 String name_File = fullName[0];
@@ -90,7 +91,6 @@ public class Logger_Class {
                 fileId = Integer.parseInt(get_number[1]);
                 sort.add(fileId);
                 Collections.sort(sort);
-
                 fileId = sort.get(sort.size()-1);
             }
         }
@@ -111,7 +111,7 @@ public class Logger_Class {
 
     // start writing head of file
     public void init(){
-        String file_name = createFile();
+        String file_name = createFile(); //creation of file
         add_struct(file_name, Start.n_passenger);   //header file
     }
 
@@ -164,7 +164,6 @@ public class Logger_Class {
     }
 
     public void departed(int total_transported){
-        //" departed with " + current_capacity + " passengers.\n"
         try {
             fileWriter = new FileWriter(file_name, true);
             fileWriter.write("\nFlight " + FN + " departed with " + total_transported + " passengers.\n");
@@ -176,6 +175,7 @@ public class Logger_Class {
         }
     }
 
+    // summary of flights
     public void summary(){
         try {
             fileWriter = new FileWriter(file_name, true);
@@ -189,28 +189,21 @@ public class Logger_Class {
         }
     }
 
-
     //when change main events
     public void log_write(String type){
-
         try {
             fileWriter = new FileWriter(file_name, true);
             StringBuilder struct_string = new StringBuilder();
-
-            //struct_string.append("Flight ").append(FN).append(":boarding started.\n");
             struct_string.append(Pilot_state[ST_Pilot.ordinal()]).append(" ");
-
             struct_string.append(Hostess_state[ST_Hostess.ordinal()]).append(" ");
+
             for (int i = 0; i < Start.n_passenger; i ++){
                 struct_string.append(Passenger_state[ST_Passenger[i].ordinal()]).append(" ");
             }
-            //struct_string.append("\t").append("\t").append(ATL.size());
-            struct_string.append("\t").append(Q.size()).append("\t").append(IN_F.size()).append("\t").append(ATL.size());
-            struct_string.append("\n");
+            struct_string.append("\t").append(Q.size()).append("\t").append(IN_F.size()).append("\t").append(ATL.size()).append("\n");
 
             fileWriter.write(struct_string.toString());
             fileWriter.close();
-
         } catch (IOException e){
             e.printStackTrace();
         }

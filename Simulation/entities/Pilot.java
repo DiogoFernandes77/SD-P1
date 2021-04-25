@@ -1,3 +1,8 @@
+/**
+ *  Log Class to produce log file each initiation
+ *  @author António Ramos e Diogo Fernandes
+ */
+
 package Simulation.entities;
 
 import Simulation.Log_file.Logger_Class;
@@ -13,16 +18,15 @@ public class Pilot extends Thread{
         DEBOARDING,
         FLYING_BACK
     }
+
     private State pilot_state;
     private int flight_passanger_number;
     public int id_to_set = 0;
     private State get_State(){
         return pilot_state;
     }
-    
-    
-    public Pilot(){
 
+    public Pilot(){
         pilot_state = State.AT_TRANSFER_GATE;
         synchronized (Logger_Class.class)
         {
@@ -70,23 +74,23 @@ public class Pilot extends Thread{
         }
         DepartAirport.getInstance().waitForAllInBoarding();
     }
+
     private void flyToDestinationPoint(){
         pilot_state = State.FLYING_FORWARD;
         synchronized (Logger_Class.class)
         {
             Logger_Class.getInstance().setST_Pilot(pilot_state);
-            //Logger_Class.getInstance().board_start("\nFlight " + id_to_set + ":");
             Logger_Class.getInstance().log_write("Pilot is flying forward");
         }
         Plane.getInstance().flyToDestinationPoint();
     }
+
     private void announceArrival(){
         pilot_state = State.DEBOARDING;
         synchronized (Logger_Class.class)
         {
             Logger_Class.getInstance().setST_Pilot(pilot_state);
             Logger_Class.getInstance().board_start("\nFlight " + id_to_set + ": arrived.\n");
-           // Logger_Class.getInstance().log_write("Pilot is deboarding");
         }
         Plane.getInstance().announceArrival();
     }
@@ -97,7 +101,6 @@ public class Pilot extends Thread{
         {
             Logger_Class.getInstance().setST_Pilot(pilot_state);
             Logger_Class.getInstance().board_start("\nFlight " + id_to_set + ": returning.\n");
-            //Logger_Class.getInstance().log_write("Pilot is flying back");
         }
         Plane.getInstance().flyToDeparturePoint();
     }
@@ -110,7 +113,6 @@ public class Pilot extends Thread{
             Logger_Class.getInstance().log_write("Pilot is at transfer gate");
         }
         DepartAirport.getInstance().parkAtTransferGate();
-
     }
 
     public boolean stillPassenger(){
@@ -121,8 +123,6 @@ public class Pilot extends Thread{
         return this.flight_passanger_number;
     }
 
-    public void setFlight_passanger_number(int flight_passanger_number) {
-        this.flight_passanger_number = flight_passanger_number;
-    }
+    public void setFlight_passanger_number(int flight_passanger_number) { this.flight_passanger_number = flight_passanger_number; }
 
 }

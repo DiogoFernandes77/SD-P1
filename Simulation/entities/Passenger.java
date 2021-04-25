@@ -1,3 +1,8 @@
+/**
+ *  Log Class to produce log file each initiation
+ *  @author António Ramos e Diogo Fernandes
+ */
+
 package Simulation.entities;
 
 import java.util.ArrayList;
@@ -25,9 +30,7 @@ public class Passenger extends Thread{
         id_passenger = id;
         synchronized (Logger_Class.class) {
             Logger_Class.getInstance().setST_Passenger(id_passenger, passenger_state);
-          //  Logger_Class.getInstance().log_write("Passenger State");
         }
-
     }
 
     //implementation of the method run which establishes the thread operativeness
@@ -52,20 +55,17 @@ public class Passenger extends Thread{
         }catch(Exception e){
             System.out.print("Error traveling to airport");
         }
-        //System.out.printf("%d arrived at airport \n", id_passenger);
     }
 
     private void enterQueue(){
         passenger_state = State.IN_QUEUE;
         synchronized (Logger_Class.class) {
             Logger_Class.getInstance().setST_Passenger(id_passenger, passenger_state);
-
             Logger_Class.getInstance().log_write("Passenger " + id_passenger + " is entering in queue");
         }
         DepartAirport.getInstance().enterQueue(this);
-
-        //System.out.printf(passenger_state + "%d\n",id_passenger);
     }
+
     private void waitInQueue(){
         passenger_state = State.IN_QUEUE;
         synchronized (Logger_Class.class) {
@@ -74,21 +74,10 @@ public class Passenger extends Thread{
         }
         DepartAirport.getInstance().waitInQueue(this);
     }
-    private void showDocuments(){
-        DepartAirport.getInstance().showDocuments(this);
+    private void showDocuments(){ DepartAirport.getInstance().showDocuments(this); }
 
+    private void boardThePlane(){ Plane.getInstance().boardThePlane(this); }
 
-        
-    }
-
-
-
-
-
-    private void boardThePlane(){
-        Plane.getInstance().boardThePlane(this);
-
-    }
     private void waitForEndOfFlight(){
         passenger_state = State.IN_FLIGHT;
         synchronized (Logger_Class.class) {
@@ -97,14 +86,10 @@ public class Passenger extends Thread{
         }
         Plane.getInstance().waitForEndOfFlight();
     }
-    
 
-    private void leaveThePlane(){
-        
-        Plane.getInstance().leaveThePlane(this);
-    }
+    private void leaveThePlane(){ Plane.getInstance().leaveThePlane(this); }
+
     private void death(){
-        
         passenger_state = State.AT_DESTINATION;
 
         synchronized (Logger_Class.class) {
