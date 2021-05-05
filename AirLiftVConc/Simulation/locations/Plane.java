@@ -56,6 +56,7 @@ public class Plane  {
             flying.await(delay, TimeUnit.MILLISECONDS);
         }catch(Exception e){
              System.out.println("Interrupter Exception Error - " + e);
+            e.printStackTrace();
          }finally{
             lock.unlock();
          }
@@ -66,7 +67,8 @@ public class Plane  {
         try{
             flight_id = id;
         }catch(Exception e){
-            System.out.println("Interrupter Exception Error - " + e.toString());
+            System.out.println("Interrupter Exception Error - " + e);
+            e.printStackTrace();
          }finally{
             lock.unlock();
          }
@@ -82,7 +84,8 @@ public class Plane  {
             }
             System.out.println("PILOT: deboarding complete \n");
         }catch(Exception e){
-             System.out.println("Interrupter Exception Error - " + e.toString());
+            System.out.println("Interrupter Exception Error - " + e);
+            e.printStackTrace();
          }finally{
             lock.unlock();
          }
@@ -96,7 +99,8 @@ public class Plane  {
             plane_flying = true;
             flying.await(delay, TimeUnit.MILLISECONDS);
         }catch(Exception e){
-             System.out.println("Interrupter Exception Error - " + e.toString());
+            System.out.println("Interrupter Exception Error - " + e);
+            e.printStackTrace();
          }finally{
             lock.unlock();
          }
@@ -111,8 +115,9 @@ public class Plane  {
             }
             enter = false;
          }catch(Exception e){
-             System.out.println("Interrupter Exception Error - " + e);
-         }finally{
+            System.out.println("Interrupter Exception Error - " + e);
+            e.printStackTrace();
+        }finally{
             lock.unlock();
          }
     }
@@ -129,8 +134,10 @@ public class Plane  {
                 Logger_Class.getInstance().setIN_F(plane);
             }
          }catch(Exception e){
-             System.out.println("Interrupter Exception Error - " + e.toString());
-         }finally{
+            System.out.println("Interrupter Exception Error - " + e);
+            e.printStackTrace();
+
+        }finally{
              lock.unlock();
          }
     }
@@ -142,7 +149,8 @@ public class Plane  {
                flying.await(); 
             }
         }catch(Exception e){
-            System.out.println("Interrupter Exception Error - " + e.toString());
+            System.out.println("Interrupter Exception Error - " + e);
+            e.printStackTrace();
         }finally{
             lock.unlock();
         }
@@ -151,14 +159,15 @@ public class Plane  {
     public void leaveThePlane(int person){
         lock.lock();
         try{
-            plane.remove(person);
+            plane.remove(Integer.valueOf(person));
             cd_deboarding.signal();
             System.out.printf("Passenger %d leaving the plane \n", person);
             synchronized (Logger_Class.class) {
                 Logger_Class.getInstance().setIN_F(plane);
             }
         }catch(Exception e){
-            System.out.println("Interrupter Exception Error - " + e.toString());
+            System.out.println("Interrupter Exception Error - " + e);
+            e.printStackTrace();
         }finally{
             lock.unlock();
         }
