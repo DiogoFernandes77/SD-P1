@@ -32,9 +32,9 @@ public class Logger_Class {
     public Pilot.State ST_Pilot; // State of the Pilot
     public Hostess.State ST_Hostess; // State of the Hostess
 
-    private ArrayList<Passenger> Q; // State of the waiting queue
-    private ArrayList<Passenger> IN_F; // State of in flight
-    private ArrayList<Passenger> ATL; // State of number of passengers that have already arrived at their destination
+    private ArrayList<Integer> Q; // State of the waiting queue
+    private ArrayList<Integer> IN_F; // State of in flight
+    private ArrayList<Integer> ATL; // State of number of passengers that have already arrived at their destination
 
     private static FileWriter fileWriter; // Write on file
 
@@ -219,9 +219,9 @@ public class Logger_Class {
 
     public void setST_Hostess(Hostess.State st) { this.ST_Hostess = st; }
 
-    public void setQ(Queue<Passenger> q) { Q = new ArrayList<>(q); }
+    public void setQ(Queue<Integer> q) { Q = new ArrayList<>(q); }
 
-    public void setIN_F(ArrayList<Passenger> IN_F) { this.IN_F = IN_F; }
+    public void setIN_F(ArrayList<Integer> IN_F) { this.IN_F = IN_F; }
 
-    public void setATL(ArrayList<Passenger> ATL) { this.ATL = ATL; }
+    public void setATL(ArrayList<Integer> ATL) { this.ATL = ATL; }
 }

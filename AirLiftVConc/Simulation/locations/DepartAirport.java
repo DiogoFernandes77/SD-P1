@@ -24,7 +24,7 @@ public class DepartAirport {
 
     private final Lock lock;
     private final Condition waitingPlane, waitingPassenger,waitingCheck,waitingFly,waitingShow;
-    private Queue<Integer> queue ;
+    private final Queue<Integer> queue ;
     
     private boolean plane_rdy = false;
     private boolean showing = false;
@@ -35,7 +35,7 @@ public class DepartAirport {
     private DepartAirport(){
         lock = new ReentrantLock();
 
-        queue = new LinkedList<Integer>();
+        queue = new LinkedList<>();
         waitingPlane = lock.newCondition();
         waitingPassenger = lock.newCondition();
         waitingCheck = lock.newCondition();
@@ -49,7 +49,7 @@ public class DepartAirport {
 
         synchronized (Logger_Class.class)
         {
-            //Logger_Class.getInstance().setQ(queue);
+            Logger_Class.getInstance().setQ(queue);
         }
     }
 
@@ -70,13 +70,14 @@ public class DepartAirport {
             waitingPlane.signal();
             System.out.print("Plane is Ready \n");
         }catch(Exception e){
-            System.out.println("Interrupter Exception Error - " + e.toString());
+            System.out.println("Interrupter Exception Error - " + e);
+            e.printStackTrace();
         }finally{
             lock.unlock();
         }
     }
      
-    //waits for the passenger enter in the plane until hostess gives the singal
+    //waits for the passenger enter in the plane until hostess gives the signal
     public void waitForAllInBoarding( ){
         lock.lock();
         try{
@@ -86,7 +87,8 @@ public class DepartAirport {
            boardingComplete = false; 
            
         }catch(Exception e){
-            System.out.println("Interrupter Exception Error - " + e.toString());
+            System.out.println("Interrupter Exception Error - " + e);
+            e.printStackTrace();
         }finally{
             lock.unlock();
         }
@@ -96,18 +98,18 @@ public class DepartAirport {
         lock.lock();
         try{
             System.out.println("PILOT: parking plane \n");
-            
             System.out.printf("PILOT: passenger left = %d \n", passenger_left);
         }catch(Exception e){
-             System.out.println("Interrupter Exception Error - " + e.toString());
-         }finally{
+            System.out.println("Interrupter Exception Error - " + e);
+            e.printStackTrace();
+        }finally{
             lock.unlock();
          }
     }
    
     //---------------------------------------------------/Hostess methods/-----------------------------------------------------//
 
-    //Hostess gets ready and waits untill first passenger
+    //Hostess gets ready and waits until first passenger
     public void prepareForPassBoarding(){
         lock.lock();
         try{
@@ -116,7 +118,8 @@ public class DepartAirport {
                 waitingPassenger.await();
             }
         }catch(Exception e){
-            System.out.println("Interrupter Exception Error - " + e.toString());
+            System.out.println("Interrupter Exception Error - " + e);
+            e.printStackTrace();
         }finally{
             lock.unlock();
         }
@@ -142,7 +145,8 @@ public class DepartAirport {
             current_capacity++;
             passenger_left--;
         }catch(Exception e){
-            System.out.println("Interrupter Exception Error - " + e.toString());
+            System.out.println("Interrupter Exception Error - " + e);
+            e.printStackTrace();
         }finally{
             lock.unlock();
         }
@@ -154,12 +158,13 @@ public class DepartAirport {
         try{
             block_state2 = true;
             waitingPassenger.signal();
-            System.out.print("Hostess waiting passanger \n");
+            System.out.print("Hostess waiting passenger \n");
             while(queue.isEmpty()){
                 waitingPassenger.await(); 
             }
         }catch(Exception e){
-            System.out.println("Interrupter Exception Error - " + e.toString());
+            System.out.println("Interrupter Exception Error - " + e);
+            e.printStackTrace();
         }finally{
             lock.unlock();
         }
@@ -175,7 +180,8 @@ public class DepartAirport {
                 Logger_Class.getInstance().departed(current_capacity);
             }
         }catch(Exception e){
-            System.out.println("Interrupter Exception Error - " + e.toString());
+            System.out.println("Interrupter Exception Error - " + e);
+            e.printStackTrace();
         }finally{
             lock.unlock();
         }
@@ -190,11 +196,11 @@ public class DepartAirport {
             }
             plane_rdy = false;
         }catch(Exception e){
-            System.out.println("Interrupter Exception Error - " + e.toString());
-        }finally{
+            System.out.println("Interrupter Exception Error - " + e);
+            e.printStackTrace();
+        }finally {
             lock.unlock();
         }
-        
     }
     
     //---------------------------------------------------/Passenger methods/-----------------------------------------------------//
@@ -204,12 +210,12 @@ public class DepartAirport {
         try{
             System.out.printf("passenger %d enters queue \n", person);
             queue.add(person);
-            synchronized (Logger_Class.class)
-            {
-                //Logger_Class.getInstance().setQ(queue);
+            synchronized (Logger_Class.class) {
+                Logger_Class.getInstance().setQ(queue);
             }
         }catch(Exception e){
-            System.out.println("Interrupter Exception Error - " + e.toString());
+            System.out.println("Interrupter Exception Error - " + e);
+            e.printStackTrace();
         }finally{
             lock.unlock();
         }
@@ -221,11 +227,12 @@ public class DepartAirport {
         try{
             waitingPassenger.signal();
             System.out.printf("passenger %d wait for check \n", person);
-            while(!(rdyCheck && (queue.peek() == person))){// cada thread ve se hostess ta pronta e se é a vez deles
-                waitingCheck.await();;
+            while(!(rdyCheck && (queue.peek() == person))){// each thread see if hostess is ready and if is their turn
+                waitingCheck.await();
             }
         }catch(Exception e){
-            System.out.println("Interrupter Exception Error - " + e.toString());
+            System.out.println("Interrupter Exception Error - " + e);
+            e.printStackTrace();
         }finally{
             lock.unlock();
         }
@@ -247,7 +254,8 @@ public class DepartAirport {
             }
             block_state2 = false;
         }catch(Exception e){
-            System.out.println("Interrupter Exception Error - " + e.toString());
+            System.out.println("Interrupter Exception Error - " + e);
+            e.printStackTrace();
         }finally{
             lock.unlock();
         }

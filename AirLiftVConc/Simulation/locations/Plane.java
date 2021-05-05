@@ -36,9 +36,8 @@ public class Plane  {
         flying = lock.newCondition();
         hostess = lock.newCondition();
         cd_deboarding = lock.newCondition();
-        synchronized (Logger_Class.class)
-        {
-            //Logger_Class.getInstance().setIN_F(plane);
+        synchronized (Logger_Class.class) {
+            Logger_Class.getInstance().setIN_F(plane);
         }
     }
 
@@ -56,7 +55,7 @@ public class Plane  {
         try{
             flying.await(delay, TimeUnit.MILLISECONDS);
         }catch(Exception e){
-             System.out.println("Interrupter Exception Error - " + e.toString());
+             System.out.println("Interrupter Exception Error - " + e);
          }finally{
             lock.unlock();
          }
@@ -112,7 +111,7 @@ public class Plane  {
             }
             enter = false;
          }catch(Exception e){
-             System.out.println("Interrupter Exception Error - " + e.toString());
+             System.out.println("Interrupter Exception Error - " + e);
          }finally{
             lock.unlock();
          }
@@ -126,7 +125,9 @@ public class Plane  {
             enter = true;
             hostess.signal();
             System.out.printf("passenger %d boarding plane \n", person);
-
+            synchronized (Logger_Class.class) {
+                Logger_Class.getInstance().setIN_F(plane);
+            }
          }catch(Exception e){
              System.out.println("Interrupter Exception Error - " + e.toString());
          }finally{
@@ -153,7 +154,9 @@ public class Plane  {
             plane.remove(person);
             cd_deboarding.signal();
             System.out.printf("Passenger %d leaving the plane \n", person);
-
+            synchronized (Logger_Class.class) {
+                Logger_Class.getInstance().setIN_F(plane);
+            }
         }catch(Exception e){
             System.out.println("Interrupter Exception Error - " + e.toString());
         }finally{
