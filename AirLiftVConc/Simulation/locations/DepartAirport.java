@@ -239,14 +239,14 @@ public class DepartAirport {
     }
     
     //Passenger shows documents
-    public void showDocuments(Passenger person){
+    public void showDocuments(int person){
         lock.lock();
         try{
             showing = true;
             waitingShow.signal();
-            System.out.printf("passenger %d  show documents \n", person.getId_passenger());
+            System.out.printf("passenger %d  show documents \n", person);
             synchronized(Logger_Class.class){
-                Logger_Class.getInstance().pass_check( ": passenger " + person.getId_passenger() + " checked.\n");
+                Logger_Class.getInstance().pass_check( ": passenger " + person + " checked.\n");
             }
             //block state 2
             while(!block_state2){

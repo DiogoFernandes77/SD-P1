@@ -74,7 +74,7 @@ public class Passenger extends Thread{
         }
         DepartAirport.getInstance().waitInQueue(id_passenger);
     }
-    private void showDocuments(){ DepartAirport.getInstance().showDocuments(this); }
+    private void showDocuments(){ DepartAirport.getInstance().showDocuments(id_passenger); }
 
     private void boardThePlane(){ Plane.getInstance().boardThePlane(id_passenger); }
 
