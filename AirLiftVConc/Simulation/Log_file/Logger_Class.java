@@ -9,7 +9,7 @@ import Simulation.Start;
 import Simulation.entities.Hostess;
 import Simulation.entities.Passenger;
 import Simulation.entities.Pilot;
-
+import Simulation.States.Pilot_State;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,7 +29,7 @@ public class Logger_Class {
     //auxiliar variables
     int FN; // number of flight
     public Passenger.State[] ST_Passenger; // State of the Passengers; save state of each passenger
-    public Pilot.State ST_Pilot; // State of the Pilot
+    public Pilot_State ST_Pilot; // State of the Pilot
     public Hostess.State ST_Hostess; // State of the Hostess
 
     private ArrayList<Integer> Q; // State of the waiting queue
@@ -215,7 +215,7 @@ public class Logger_Class {
 
     public void setST_Passenger(int id, Passenger.State ST_Passenger) { this.ST_Passenger[id] = ST_Passenger; }
 
-    public void setST_Pilot(Pilot.State ST_Pilot) { this.ST_Pilot = ST_Pilot; }
+    public void setST_Pilot(Pilot_State ST_Pilot) { this.ST_Pilot = ST_Pilot; }
 
     public void setST_Hostess(Hostess.State st) { this.ST_Hostess = st; }
 

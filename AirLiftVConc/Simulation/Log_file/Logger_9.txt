@@ -1,0 +1,35 @@
+PT 	 HT   P00  P01 	InQ InF PTAL
+ATRG WTFL GTAP GTAP 0	0	0
+ATRG WTFL GTAP GTAP 	0	0	0
+
+Flight 1: boarding started.
+WTFB WTFL GTAP GTAP 	0	0	0
+WTFB WTPS GTAP GTAP 	0	0	0
+WTFB WTPS GTAP INQE 	0	0	0
+WTFB WTPS GTAP INQE 	1	0	0
+WTFB WTPS GTAP INQE 	1	0	0
+WTFB CKPS GTAP INQE 	1	0	0
+
+Flight 1: passenger 1 checked.
+WTFB WTPS GTAP INQE 	1	1	0
+WTFB WTPS GTAP INFL 	1	1	0
+WTFB WTPS INQE INFL 	1	1	0
+WTFB WTPS INQE INFL 	1	1	0
+WTFB CKPS INQE INFL 	1	1	0
+
+Flight 1: passenger 0 checked.
+WTFB CKPS INFL INFL 	1	2	0
+WTFB RDTF INFL INFL 	1	2	0
+
+Flight 1 departed with 2 passengers.
+FLFW RDTF INFL INFL 	1	2	0
+
+Flight 1: arrived.
+DRPP RDTF INFL ATDS 	1	0	0
+DRPP RDTF ATDS ATDS 	1	0	1
+
+Flight 1: returning.
+ATRG RDTF ATDS ATDS 	1	0	2
+
+Airlift sum up:
+Flight 1 departed with 2 passengers.

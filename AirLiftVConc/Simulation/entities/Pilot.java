@@ -4,30 +4,23 @@
  */
 
 package Simulation.entities;
-
+import Simulation.States.Pilot_State;
 import Simulation.Log_file.Logger_Class;
 import Simulation.locations.DepartAirport;
 import Simulation.locations.Plane;
 
 public class Pilot extends Thread{
-    public enum State{
-        AT_TRANSFER_GATE,
-        READY_FOR_BOARDING,
-        WAIT_FOR_BOARDING,
-        FLYING_FORWARD,
-        DEBOARDING,
-        FLYING_BACK
-    }
+    private Pilot_State pilot_state;
 
-    private State pilot_state;
+    
     private int flight_passanger_number;
     public int id_to_set = 0;
-    private State get_State(){
+    private Pilot_State get_State(){
         return pilot_state;
     }
 
     public Pilot(){
-        pilot_state = State.AT_TRANSFER_GATE;
+        pilot_state = Pilot_State.AT_TRANSFER_GATE;
         synchronized (Logger_Class.class)
         {
             Logger_Class.getInstance().setST_Pilot(pilot_state);
@@ -53,13 +46,14 @@ public class Pilot extends Thread{
     }
 
     private void setFlightID(){
-    	id_to_set++;
+    	
+        id_to_set++;
         Plane.getInstance().setFlightId(id_to_set);
     }
     
     private void informPlaneReadyForBoarding(){
         
-        pilot_state = State.READY_FOR_BOARDING;
+        pilot_state = Pilot_State.READY_FOR_BOARDING;
         synchronized (Logger_Class.class)
         {
             Logger_Class.getInstance().setST_Pilot(pilot_state);
@@ -71,7 +65,7 @@ public class Pilot extends Thread{
     }
 
     private void waitForAllInBoarding(){
-        pilot_state = State.WAIT_FOR_BOARDING;
+        pilot_state = Pilot_State.WAIT_FOR_BOARDING;
         synchronized (Logger_Class.class)
         {
             Logger_Class.getInstance().setST_Pilot(pilot_state);
@@ -81,7 +75,7 @@ public class Pilot extends Thread{
     }
 
     private void flyToDestinationPoint(){
-        pilot_state = State.FLYING_FORWARD;
+        pilot_state = Pilot_State.FLYING_FORWARD;
         synchronized (Logger_Class.class)
         {
             Logger_Class.getInstance().setST_Pilot(pilot_state);
@@ -91,7 +85,7 @@ public class Pilot extends Thread{
     }
 
     private void announceArrival(){
-        pilot_state = State.DEBOARDING;
+        pilot_state = Pilot_State.DEBOARDING;
         synchronized (Logger_Class.class)
         {
             Logger_Class.getInstance().setST_Pilot(pilot_state);
@@ -101,7 +95,7 @@ public class Pilot extends Thread{
     }
 
     private void flyToDeparturePoint(){
-        pilot_state = State.FLYING_BACK;
+        pilot_state = Pilot_State.FLYING_BACK;
         synchronized (Logger_Class.class)
         {
             Logger_Class.getInstance().setST_Pilot(pilot_state);
@@ -111,7 +105,7 @@ public class Pilot extends Thread{
     }
     
     private void parkAtTransferGate(){
-        pilot_state = State.AT_TRANSFER_GATE;
+        pilot_state = Pilot_State.AT_TRANSFER_GATE;
         synchronized (Logger_Class.class)
         {
             Logger_Class.getInstance().setST_Pilot(pilot_state);
