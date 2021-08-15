@@ -1,4 +1,5 @@
 # SD-P1
+## Grade: 15/20
 Project 1 for Distributed Systems course
 Airport Simulation using java threads
 
